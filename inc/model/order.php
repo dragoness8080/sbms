@@ -30,4 +30,16 @@ class Sbms_Order{
         return pdo_getcolumn('sbms_order', $condition, 'count(id)');
     }
 
+    /**
+     * 获取订单编号
+     * @param string $prefix
+     * @return string
+     */
+    public function getOrderSn($prefix = ''){
+        $sn = date('YmdHis') . rand(0,9999);
+        if(!empty($prefix)){
+            $sn = $prefix . $sn;
+        }
+        return $sn;
+    }
 }

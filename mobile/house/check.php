@@ -35,7 +35,9 @@ $order = array(
     'dayallmoney' => 0,
     'discountmoney' => 0,
     'levelmoney' => 0,
-    'paymoney' => 0
+    'paymoney' => 0,
+    'days' => $days,
+    'levelrate' => 0
 );
 
 $start = strtotime($dt_start);
@@ -57,8 +59,9 @@ $order['dayallmoney'] = $dayAllMoney;
 if($member['type'] == 2){
     $level = m('member')->getLevel($member['level_id']);
     $rate = $level['discount'];
-    $levelMoney = $dayAllMoney * $rate * -1;
+    $levelMoney = $dayAllMoney * $rate / 100 * -1;
     $order['levelmoney'] = $levelMoney;
+    $order['levelrate'] = $rate;
 }
 
 $order['paymoney'] = $dayAllMoney + $order['discountmoney'] + $order['levelmoney'];

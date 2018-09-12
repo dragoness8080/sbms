@@ -1,4 +1,5 @@
 {template 'common/header_base'}
+<link rel="stylesheet" type="text/css" href="../addons/sbms/static/css/mobiscroll.custom.min.css" />
 <link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/check.css" />
 <div id="container">
     <div class="add-order-body">
@@ -20,20 +21,20 @@
             </div>
             <div class="input-line">
                 <div class="input-label">入住人</div>
-                <div class="input-add"><input type="text" name="name" value="{$order['realname']}" placeholder="请填写您的姓名" /></div>
+                <div class="input-add"><input type="text" id="name" name="name" value="{$order['realname']}" placeholder="请填写您的姓名" /></div>
             </div>
             <div class="input-line">
                 <div class="input-label">手机号</div>
-                <div class="input-add"><input type="text" name="tel" value="{$order['mobile']}" placeholder="请填写您的手机号" /></div>
+                <div class="input-add"><input type="text" id="tel" name="tel" value="{$order['mobile']}" placeholder="请填写您的手机号" /></div>
             </div>
             <div class="input-line">
                 <div class="input-label">身份证号</div>
-                <div class="input-add"><input type="text" name="cord" value="" placeholder="请填写您的身份证号" /></div>
+                <div class="input-add"><input type="text" id="card" name="card" value="" placeholder="请填写您的身份证号" /></div>
             </div>
             <div class="input-line">
                 <div class="input-label">选择到店时间</div>
                 <div class="input-add" id="choice_time">
-                    <span class="check-date">{$order['time']}</span>
+                    <span class="check-date"><input type="text" id="time" name="time" value="{$order['time']}" placeholder="请填写您的到店时间" /></span>
                     <span class="angele-right"><i class="fa fa-angle-right"></i></span>
                 </div>
             </div>
@@ -42,30 +43,266 @@
             {loop $order['daymoney'] $item}
             <div class="detail-item">
                 <div class="item-name">{$item['title']}</div>
-                <div class="item-price">&yen;{$item['money']}</div>
+                <div class="item-price">&yen;<i class="day_money">{$item['money']}</i></div>
             </div>
             {/loop}
             <div class="detail-item">
                 <div class="item-name">应付金额</div>
-                <div class="item-price">&yen;{$order['dayallmoney']}</div>
+                <div class="item-price">&yen;<i class="all_money">{$order['dayallmoney']}</i></div>
             </div>
             <div class="detail-item">
                 <div class="item-name">优惠券</div>
-                <div class="item-price">&yen;{$order['discountmoney']}</div>
+                <div class="item-price">&yen;<i class="discount_money">{$order['discountmoney']}</i></div>
             </div>
             <div class="detail-item">
                 <div class="item-name">会员折扣</div>
-                <div class="item-price">&yen;{$order['levelmoney']}</div>
+                <div class="item-price">&yen;<i class="level_money">{$order['levelmoney']}</i></div>
             </div>
             <div class="detail-item">
                 <div class="item-name">实付房费</div>
-                <div class="item-price">&yen;{$order['paymoney']}</div>
+                <div class="item-price">&yen;<i class="pay_money">{$order['paymoney']}</i></div>
             </div>
         </div>
     </div>
     <div class="buyorder">
+        <input type="hidden" id="rid" value="{$rid}" />
+        <input type="hidden" id="start" value="{$dt_start}" />
+        <input type="hidden" id="end" value="{$dt_end}" />
+        <input type="hidden" id="levelRate" value="{$order['levelrate']}" />
+        <input type="hidden" id="days" value="{$order['days']}" />
+        <input type="hidden" id="roomPrice" value="{$order['room_price']}" />
+        <input type="hidden" id="roomNum" value="{$order['room_num']}" />
+        <input type="hidden" id="roomMoney" value="{$order['dayallmoney']}" />
+        <input type="hidden" id="discountMoney" value="{$order['discountmoney']}" />
+        <input type="hidden" id="levelMoney" value="{$order['levelmoney']}" />
+        <input type="hidden" id="payMoney" value="{$order['paymoney']}" />
         <div class="paybtn">提交订单</div>
-        <span>合计 <t class="order-money">&yen;{$order['paymoney']}</t></span>
+        <span>合计 <t class="order-money">&yen;<i class="pay_money">{$order['paymoney']}</i></t></span>
     </div>
 </div>
+
+<div class="payment">
+    <div class="payment-dialog">
+        <div class="dialog-header">支付方式选择</div>
+        <div class="dialog-content">
+            <div class="pay-model" data-model="wechat">
+                <span>微信支付</span>
+                <div class="check-model"><i class="fa fa-times-circle"></i></div>
+            </div>
+            <div class="pay-model" data-model="alipay">
+                <span>支付宝支付</span>
+                <div class="check-model"><i class="fa fa-times-circle"></i></div>
+            </div>
+            <div class="pay-model" data-model="credit">
+                <span>余额支付</span>
+                <div class="check-model"><i class="fa fa-times-circle"></i></div>
+            </div>
+            <div class="pay-model" data-model="goto">
+                <span>到店支付</span>
+                <div class="check-model"><i class="fa fa-times-circle"></i></div>
+            </div>
+        </div>
+        <div class="dialog-footer">确认支付</div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../addons/sbms/static/js/mobiscroll.custom.min.js"></script>
+<script type="text/javascript">
+    require(['core'],function (core) {
+
+        var theme = "ios";
+        var mode = "scroller";
+        var display = "bottom";
+        var lang="zh";
+
+        $('.minus').click(function () {
+            var num = parseInt($('#roomNum').val());
+            if(num > 1){
+                --num;
+                $('#roomNum').val(num);
+                $('.room-num').html(num + "间");
+                setPayMoney();
+            }
+        });
+        $('.plus').click(function () {
+            var num = parseInt($('#roomNum').val());
+            ++num;
+            $('#roomNum').val(num);
+            $('.room-num').html(num + "间");
+            setPayMoney();
+        });
+        $('#time').mobiscroll().time({
+            theme: theme,
+            mode: mode,
+            display: display,
+            lang: lang
+        });
+        
+        function setPayMoney() {
+            var days = parseInt($('#days').val());
+            var num = parseInt($('#roomNum').val());
+            var price = parseFloat($('#roomPrice').val());
+            var discount = parseFloat($('#discountMoney').val());
+            var level = parseFloat($('#levelRate').val());
+            var roomMoney = num * price;
+            var allMoney = roomMoney * days;
+            var levelMoney = allMoney * level / 100 * -1;
+            var orderMoney = allMoney + levelMoney;
+
+            $('.day_money').html(parseFloat(roomMoney).toFixed(2));
+            $('.all_money').html(parseFloat(allMoney).toFixed(2));
+            $('.discount_money').html(parseFloat(discount).toFixed(2));
+            $('.level_money').html(parseFloat(levelMoney).toFixed(2));
+            $('.pay_money').html(parseFloat(orderMoney).toFixed(2));
+
+            $('#discountMoney').val(parseFloat(discount).toFixed(2));
+            $('#levelRate').val(parseFloat(levelMoney).toFixed(2));
+            $('#roomMoney').val(parseFloat(allMoney).toFixed(2));
+            $('#payMoney').val(parseFloat(orderMoney).toFixed(2));
+        }
+
+        $('.paybtn').click(function () {
+            //if($(this).attr('submitting') == '1'){    return;}
+            //$(this).attr('submitting','1').html('提交中...');
+            $('.payment').show();
+        });
+
+        $('.pay-model').click(function () {
+            $('.pay-model').children('div').removeClass('on');
+            $('.pay-model').find('i').removeClass('fa-check-circle').addClass('fa-times-circle');
+            var model = $(this).data('model');
+            $(this).children('div').addClass('on');
+            $(this).find('i').removeClass('fa-times-circle').addClass('fa-check-circle');
+        });
+
+        $('.dialog-footer').click(function () {
+            if($(this).attr('submitting') == '1'){  return;}
+            //验证
+            var realname = $('#name').val();
+            if(realname == ''){
+                Tip.show($('#name'),'请填写入住人姓名');
+                return;
+            }
+            var tel = $('#tel').val();
+            if(tel == ''){
+                Tip.show($('#tel'),'请填写手机号码');
+                return;
+            }
+            if(!tel.match(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/)){
+                Tip.show($('#tel'),'手机号格式不正确');
+                return;
+            }
+            var card = $('#card').val();
+            if(card == ''){
+                Tip.show($('#card'), '请填写身份证号码');
+                return;
+            }
+            //var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            if(!card.match(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/)){
+                Tip.show($('#card'), '身份证格式不正确');
+                return;
+            }
+            var time = $('#time').val();
+            if(time == ''){
+                Tip.show($('#time'),'请选择到店时间');
+                return;
+            }
+
+            var model = '';
+            $('.pay-model').each(function () {
+                if($(this).children('div').hasClass('on')){
+                    model = $(this).data('model');
+                }
+            });
+
+            if(model == ''){
+                Tip.show(null,'请选择支付方式');
+                return
+            }
+
+            $(this).attr('submitting', '1');
+
+            var params = new Object();
+            params.rid = $('#rid').val();
+            params.dt_start = $('#start').val();
+            params.dt_end = $('#end').val();
+            params.realname = realname;
+            params.tel = tel;
+            params.idcard = card;
+            params.time = time;
+            params.allmoney = $('#roomMoney').val();
+            params.discount = $('#discountMoney').val();
+            params.levelmoney = $('#levelMoney').val();
+            params.ordermoney = $('#payMoney').val();
+            params.payment = model;
+            params.num = $('#roomNum').val();
+
+            core.json('order/confirm', params, function (json) {
+                $(this).removeAttr('submitting');
+                var result = json.result;
+                if(json.status == 1){
+                    var orderId = result.orderid;
+                    var ordersn = result.ordersn;
+                    var type = result.payment;
+                    if(type == 1){  //支付宝
+                        core.json('order/pay', {op:'pay', type:'alipay', orderid:orderId},function (rjson) {
+                            if(rjson.status != 1){
+                                core.tip.show(rjson.result);
+                                return;
+                            }
+                            location.href = core.getUrl('order/pay_alipay',{orderid:orderId});
+                            return;
+                        },true,true);
+                    }else if(type == 2){ //微信
+                        core.json('order/pay', {op:'pay', type:'wechat', orderid:orderId},function (rjson) {
+                            if(rjson.status != 1){
+                                core.tip.show(rjson.result);
+                                return;
+                            }
+                            var wechat = rjson.result.wechat;
+                            WeixinJSBridge.invoke('getBrandWCPayRequest', {
+                                'appId': wechat.appid ? wechat.appid : wechat.appId,
+                                'timeStamp': wechat.timeStamp,
+                                'nonceStr': wechat.nonceStr,
+                                'package': wechat.package,
+                                'signType': wechat.signType,
+                                'paySign': wechat.paySign,
+                            }, function (res) {
+                                if (res.err_msg == 'get_brand_wcpay_request:ok'){
+                                    core.json('order/pay', {
+                                        op:'complete',
+                                        orderid: orderId,
+                                        type:'weixin'
+                                    },function (pay_json) {
+                                        if(pay_json.status==1){
+                                            core.tip.show(pay_json.result);
+                                        }
+                                        core.tip.show(pay_json.result);
+                                    },true,true);
+                                }
+                            })
+                        },true,true);
+
+                    }else if(type == 3){ //到店
+                        location.href = core.getUrl('order/detail', {id:orderId});
+                        return;
+                    }else if(type == 4){ //余额
+                        core.json('order/pay', {op:'complete', type:'credit', orerid:orderId},function (res) {
+                            if(res.status == 1){
+                                core.message(res.result.msg,"","success");
+                                return;
+                            }else{
+                                core.tip.show(res.result);
+                                return;
+                            }
+                        },true,true);
+                    }
+                }else{
+                    core.tip.show(result);
+                }
+            },true,true);
+        });
+    });
+</script>
+
 {template 'common/footer'}
