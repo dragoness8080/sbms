@@ -42,4 +42,9 @@ class Sbms_Order{
         }
         return $sn;
     }
+
+    public function getOrderInfo($id){
+        global $_W;
+        return pdo_get('sbms_order', array('id' => $id, 'uniacid' => $_W['uniacid']));
+    }
 }

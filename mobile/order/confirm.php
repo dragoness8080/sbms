@@ -10,7 +10,6 @@ global $_W,$_GPC;
 $openid = m('user')->getOpenid();
 
 if($_W['isajax']){
-
     $rid = intval($_GPC['rid']);
     $dt_start = $_GPC['dt_start'];
     $dt_end = $_GPC['dt_end'];
