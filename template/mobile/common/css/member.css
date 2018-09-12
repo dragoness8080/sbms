@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+.member-info { height: 10rem; margin-left: 2rem; margin-right: 2rem; width: calc(100% - 4rem); padding-top: 2rem;}
+.member-info-img, .member-info-img img { width: 8rem; height: 8rem;}
+.member-info-img { display: inline-block; width: 8rem; height: 8rem; float: left;}
+.member-info-dec { display: inline-block; height: 5rem; padding-top: 2rem; float: left; padding-left: 1rem;}
+.member-name { height: 2rem; line-height: 2rem; color: #FFFFFF; font-size: 16px; font-weight: bold; padding-left: 10px;}
+.member-vip { height: 2rem; line-height: 2rem;  font-size: 12px; color: #FFFFFF; background: #000000; border-radius: 50px; padding-left: 10px; padding-right: 10px;}
+
+.member-body { width: 100%; height: 100%;}
+.mmeber-float-box { background: #FFFFFF; border-radius: 10px; margin-left: 2rem; margin-right: 2rem; width: calc(100% - 4rem); margin-top: -4.5rem; height: 10rem; box-shadow: 0px 0px 5px #8A8A8A; display: flex; float: left;}
+.flex-space { flex: 1;}
+.flex-value { flex: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #8A8A8A;}
+.flex-value .number { font-size: 14px; margin-bottom: 10px;}
+.flex-value .numbern-title { font-size: 12px;}
+
+.member-order-box { float: left; width: 100%; background: #FFFFFF; height: 9rem; margin-top: 10px;}
+.member-order-list { display: flex; height: 9rem;}
+.order-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;}
+.order-item-img { position: relative; margin-bottom: 10px;}
+.order-item-img, .order-item-img img{ width: 40px; height: 40px;}
+.order-circle-num { position: absolute; border-radius: 50px; width: 20px; height: 20px; background: #00A388; color: #FFFFFF; text-align: center; line-height: 20px; font-size: 12px; right: 0px; top: -10px;}
+
+.member-line { width: 100%; margin-top: 10px; background: #FFFFFF; height: auto; float: left; padding-bottom: 20px;}
+.line-box { margin-left: 5px; margin-right: 5px; height: 30px; line-height: 30px; border-bottom: solid 1px #DCDCDC; color: #333333;}
+.line-box span { font-size: 16px; margin-left: 10px;}
+.angele-right { float: right; margin-right: 10px;}

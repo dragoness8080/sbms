@@ -1,0 +1,119 @@
+{template 'common/header_base'}
+<link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/home.css" />
+<div id="container">
+    <div class="home-bg"></div>
+    <div class="home-body">
+        <form method="post" action="{php echo $this->createMobileUrl('house')}" enctype="multipart/form-data">
+            <input type="hidden" id="dt_start" name="dt_start" data-year="{$curDateArr[0]}" data-month="{$curDateArr[1]}" data-day="{$curDateArr[2]}" value="{$curDate}" />
+            <input type="hidden" id="dt_end" name="dt_end" value="{$nextDate}" data-year="{$nextDateArr[0]}" data-month="{$nextDateArr[1]}" data-day="{$nextDateArr[2]}" />
+            <div class="home-box">
+                <div class="home-box-search">
+                    <div class="search-div">
+                        <span id="search"></span>
+                        <input type="text" name="keyword" placeholder="请输入酒店名称/关键字" class="search-input" />
+                    </div>
+                    <div class="search-line">
+                        <div class="line"></div>
+                    </div>
+                    <div class="search-cur">
+                        <i class="fa fa-search"></i>附近
+                    </div>
+                </div>
+                <div class="home-date">
+                    <div id="check_date_in" class="check-date in">
+                        <div class="date-input">{$curDate}</div>
+                        <div class="date-input-title">入住日期</div>
+                    </div>
+                    <div id="check_date_out" class="check-date out">
+                        <div class="date-input">{$nextDate}</div>
+                        <div class="date-input-title">退房时间</div>
+                    </div>
+                </div>
+                <div class="home-day">
+                    <div class="check-date" style="flex: 2; border-bottom: solid 1px #dedede;"></div>
+                    <div class="check-day">
+                        <span class="days">0</span>天
+                    </div>
+                    <div class="check-date" style="flex: 2; border-bottom: solid 1px #dedede;"></div>
+                </div>
+                <div class="home-prices">
+                    &yen;
+                    <input type="text" name="minPrice" style="text-align: right;" value="0" />
+                    &nbsp;-&nbsp;
+                    <input type="text" name="maxPrice" value="0" />
+                </div>
+                <div class="home-submit"><button type="submit" class="btn btn-success" style="width: 100%;">查询酒店</button></div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="../addons/sbms/static/js/iScroll.js" charset="UTF-8" ></script>
+<script type="text/javascript" src="../addons/sbms/static/js/Mdate.js" charset="UTF-8" ></script>
+
+<script type="text/javascript">
+    var curDate = new Date();
+    var curYear = curDate.getFullYear();
+    var curMonth = curDate.getMonth() + 1;
+    var nextMonth = curDate.getMonth() + 2;
+    var curDay = curDate.getDate();
+
+    function setDate() {
+        var month = curMonth;
+        var day = curDay;
+        if(curMonth > 0 && curMonth < 10){  month = "0" + curMonth;}
+        if(curDay > 0 && curDay < 10){  day = "0" + curDay;}
+        return curYear + "-" + month + "-" + day;
+    }
+
+    new Mdate("check_date_in",{
+        acceptId: "dt_start",
+        beginYear: curYear,
+        beginMonth: curMonth,
+        endYear: curYear,
+        endMonth: nextMonth,
+        format: "-"
+    },calculate);
+
+    new Mdate("check_date_out", {
+        acceptId: "dt_end",
+        beginYear: curYear,
+        beginMonth: curMonth,
+        endYear: curYear,
+        endMonth: nextMonth,
+        format: "-"
+    },calculate);
+
+    function calculate() {
+        var start = $('#dt_start').val();
+        var end = $('#dt_end').val();
+        var divStart = $('#check_date_in').children('.date-input').html();
+        var divEnd = $('#check_date_out').children('.date-input').html();
+
+        var curDate = setDate();
+        if(Date.parse(new Date(curDate)) > Date.parse(new Date(start))){
+            alert('入住日期不能小于当前时间');
+            $('#dt_start').val(divStart);
+            return;
+        }
+        if(Date.parse(new Date(start)) > Date.parse(new Date(end))){
+            alert('退房日期不能小于入住日期');
+            $('#dt_end').val(divEnd);
+            return;
+        }
+
+        $('#check_date_in').children('.date-input').html(start);
+        $('#check_date_out').children('.date-input').html(end);
+
+        if(start != '' && end != ''){
+            var startTimes = Date.parse(new Date(start));
+            var endTimes = Date.parse(new Date(end));
+            var days = (endTimes - startTimes) / 1000 / 3600 / 24;
+            if(days < 0) { days = 0;}
+            $('.days').html(Math.ceil(days));
+        }else{
+            $('.days').html(0);
+        }
+    }
+</script>
+{php $reservation = true}
+{template 'common/footer_base'}

@@ -1,0 +1,157 @@
+{template 'common/header_base'}
+<link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/home.css" />
+<div id="container" style="padding-left: 5px; padding-right: 5px;">
+    <div class="home-bg"></div>
+    <div class="home-body">
+        <div class="home-box">
+            <div class="home-date">
+                <div id="check_date_in" class="check-date in">
+                    <div class="date-input">{$dt_start}</div>
+                    <div class="date-input-title">入住日期</div>
+                </div>
+                <div id="check_date_out" class="check-date out">
+                    <div class="date-input">{$dt_end}</div>
+                    <div class="date-input-title">退房时间</div>
+                </div>
+            </div>
+            <div class="home-day padding-bottom-10">
+                <div class="check-date" style="flex: 2; border-bottom: solid 1px #dedede;"></div>
+                <div class="check-day">
+                    <span class="days">{$days}</span>天
+                </div>
+                <div class="check-date" style="flex: 2; border-bottom: solid 1px #dedede;"></div>
+            </div>
+        </div>
+
+        <div class="home-order-list">
+            <div class="home-order-item {if empty($orderby) || $orderby == 'recommend desc'}active{/if}" data-orderby="recommend desc">推荐排序</div>
+            <div class="home-order-item {if $orderby == 'zd_money desc'}active{/if}" data-orderby="zd_money desc">价格排序</div>
+            <div class="home-order-item {if $orderby == 'distance dsec'}active{/if}" data-orderby="distance dsec">距离排序</div>
+        </div>
+        <div class="home-hotal-list"></div>
+    </div>
+</div>
+<script type="text/html" id="hotal_list">
+    <%each list as h%>
+    <div class="hotal-list-item" data-id="<%h.id%>">
+        <div class="hotal-item-img"><img src="<%h.ewm_logo%>" class="img-rounded" /></div>
+        <div class="hotal-item-list">
+            <div class="item-list-title"><%h.name%></div>
+            <div class="item-list-address"><i class="address-mark"></i><%h.address%></div>
+            <div class="item-list-address"><i class="address-mark-p"></i>距离你<span id="distance">600.00</span>米</div>
+        </div>
+        <div class="hotal-item-price">
+            <span>&yen;</span><%h.zd_money%><span>起</span>
+        </div>
+    </div>
+    <%/each%>
+</script>
+<script type="text/html" id="hotal_empty">
+    <div class="club-list-empty">
+        <div class="empty-item-img"></div>
+        <div class="empty-item-text">没有找到民宿信息。</div>
+    </div>
+</script>
+<script type="text/javascript">
+    var loading = false;
+    var stop = true;
+    var params = new Object();
+    params.dt_start = '{$dt_start}';
+    params.dt_end = '{$dt_end}';
+    params.orderby = '{$orderby}';
+    params.keyword = '{$keyWord}';
+
+    require(['core','tpl'],function (core,tpl) {
+        core.json('house/list',params,function (res) {
+            if(res.status == 1){
+                loading = false;
+                params.page = 1;
+                $('.home-hotal-list').html(tpl('hotal_list', res.result));
+                if(res.result.list.length <= 0){
+                    loading = true;
+                    $('.home-hotal-list').scroll = null;
+                    $('#home-hotal-list').html(tpl('hotal_empty'));
+                    return;
+                }
+
+                bindEvents();
+                stop = true;
+                bindMore();
+            }else{
+                loading = true;
+                $(window).scroll = null;
+                $('.home-hotal-list').html(tpl('hotal_empty'));
+            }
+        },true,true);
+
+        function bindEvents() {
+            $('.hotal-list-item').unbind('click').click(function () {
+                location.href = core.getUrl('house/detail', {id: $(this).data('id'),dt_start:params.dt_start,dt_end:params.dt_end});
+            });
+        }
+
+        function bindMore() {
+            $(window).scroll(function () {
+                if(loading){    return;}
+                var totalHeight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+                if($(document).height() <= totalHeight){
+                    if(stop){
+                        stop = false;
+                        $('.home-hotal-list').append('<div class="list-laoding"><i class="fa fa-spinner fa-spin"></i>正在加载更多商品</div>');
+                        if(params.page == '' || params.page == 'undefined'){
+                            params.page = 1;
+                        }
+                        params.page ++ ;
+                    }
+                    getMoreRooms();
+                }
+            });
+        }
+
+        function getMoreRooms() {
+            core.json('house/list', params, function (res) {
+                if(res.status == 1){
+                    $('.list-laoding').remove();
+                    $('.home-hotal-list').append(tpl('hotal_list', res.result));
+                    if(res.result.list.length < res.result.pageCount){
+                        $('.home-hotal-list').append('<div class="list-laoding">已加载全部民宿</div>');
+                        loading = true;
+                        $(window).scroll = null;
+                        return;
+                    }
+                    stop = true;
+                    bindEvents();
+                }
+            },true,true);
+        }
+
+        $('.home-order-item').click(function () {
+            $('.home-order-item').removeClass('active');
+            $(this).addClass('active');
+            params.orderby = $(this).data('orderby');
+            params.page = 1;
+            core.json('house/list', params, function (res) {
+                if(res.status == 1){
+                    loading = false;
+                    params.page = 1;
+                    $('.home-hotal-list').html(tpl('hotal_list', res.result));
+                    if(res.result.list.length <= 0){
+                        loading = true;
+                        $(window).scroll = null;
+                        $('#home-hotal-list').html(tpl('hotal_empty'));
+                        return;
+                    }
+
+                    bindEvents();
+                    stop = true;
+                    bindMore();
+                }else{
+                    loading = true;
+                    $(window).scroll = null;
+                    $('.home-hotal-list').html(tpl('hotal_empty'));
+                }
+            },true,true);
+        });
+    });
+</script>
+{template 'common/footer'}

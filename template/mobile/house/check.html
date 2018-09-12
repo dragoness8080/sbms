@@ -1,0 +1,71 @@
+{template 'common/header_base'}
+<link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/check.css" />
+<div id="container">
+    <div class="add-order-body">
+        <div class="hotal-info">
+            <div class="title">{$order['hotal_name']}</div>
+            <div class="list"><i class="fa fa-map-marker"></i> {$order['hotal_address']}</div>
+            <div class="list"><i class="fa fa-home"></i> 房型：{$order['room_name']}</div>
+            <div class="list"><i class="fa fa-bed"></i> 床型：{$order['room_bed']}</div>
+            <div class="list"><i class="fa fa-calendar"></i> 入住：<span>{$dt_start}</span> 离店：<span>{$dt_end}</span></div>
+        </div>
+        <div class="check-in-input">
+            <div class="input-line">
+                <div class="input-label">房间数</div>
+                <div class="input-add">
+                    <span class="minus"><i class="fa fa-minus-circle"></i></span>
+                    <span class="room-num">{$order['room_num']}间</span>
+                    <span class="plus"><i class="fa fa-plus-circle"></i></span>
+                </div>
+            </div>
+            <div class="input-line">
+                <div class="input-label">入住人</div>
+                <div class="input-add"><input type="text" name="name" value="{$order['realname']}" placeholder="请填写您的姓名" /></div>
+            </div>
+            <div class="input-line">
+                <div class="input-label">手机号</div>
+                <div class="input-add"><input type="text" name="tel" value="{$order['mobile']}" placeholder="请填写您的手机号" /></div>
+            </div>
+            <div class="input-line">
+                <div class="input-label">身份证号</div>
+                <div class="input-add"><input type="text" name="cord" value="" placeholder="请填写您的身份证号" /></div>
+            </div>
+            <div class="input-line">
+                <div class="input-label">选择到店时间</div>
+                <div class="input-add" id="choice_time">
+                    <span class="check-date">{$order['time']}</span>
+                    <span class="angele-right"><i class="fa fa-angle-right"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="input-detail">
+            {loop $order['daymoney'] $item}
+            <div class="detail-item">
+                <div class="item-name">{$item['title']}</div>
+                <div class="item-price">&yen;{$item['money']}</div>
+            </div>
+            {/loop}
+            <div class="detail-item">
+                <div class="item-name">应付金额</div>
+                <div class="item-price">&yen;{$order['dayallmoney']}</div>
+            </div>
+            <div class="detail-item">
+                <div class="item-name">优惠券</div>
+                <div class="item-price">&yen;{$order['discountmoney']}</div>
+            </div>
+            <div class="detail-item">
+                <div class="item-name">会员折扣</div>
+                <div class="item-price">&yen;{$order['levelmoney']}</div>
+            </div>
+            <div class="detail-item">
+                <div class="item-name">实付房费</div>
+                <div class="item-price">&yen;{$order['paymoney']}</div>
+            </div>
+        </div>
+    </div>
+    <div class="buyorder">
+        <div class="paybtn">提交订单</div>
+        <span>合计 <t class="order-money">&yen;{$order['paymoney']}</t></span>
+    </div>
+</div>
+{template 'common/footer'}

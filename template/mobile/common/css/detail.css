@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+.hotal-details { height: 100%;}
+.details-title { height: 30px; background: #bcbcbc; color: #333333; font-size: 16px; padding-left: 20px; line-height: 30px;}
+.details-list { display: flex; flex-direction: column; justify-content: center; color: #8A8A8A; font-size: 14px;}
+.details-list-item { flex: 1; padding-left: 20px; padding-top: 10px; padding-bottom: 10px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.details-service { display: flex; align-items: center; justify-content: center;}
+.details-service-item { flex: 1; padding: 10px 15px; display: flex; flex-direction: column; color: #8A8A8A; font-size: 0.5rem; align-items: center; justify-content: center;}
+.service-img {flex: 1;}
+.service-img i { display: inline-block; width: 30px; height: 30px;}
+.service-name { flex: 1; padding: 5px 0;}
+.service-name-open { flex: 1; padding: 5px 0; color: #238E68;}
+.off_clock { background: url(/addons/sbms/static/images/off_clock.png) no-repeat; background-size: 100% 100%;}
+.off_wifi { background: url(/addons/sbms/static/images/off_wifi.png) no-repeat; background-size: 100% 100%;}
+.off_hot { background: url(/addons/sbms/static/images/off_hot.png) no-repeat; background-size: 100% 100%;}
+.off_stop { background: url(/addons/sbms/static/images/off_stop.png) no-repeat; background-size: 100% 100%;}
+.off_zc { background: url(/addons/sbms/static/images/off_zc.png) no-repeat; background-size: 100% 100%;}
+.off_yl { background: url(/addons/sbms/static/images/off_yl.png) no-repeat; background-size: 100% 100%;}
+.off_jsf { background: url(/addons/sbms/static/images/off_jsf.png) no-repeat; background-size: 100% 100%;}
+.off_hys { background: url(/addons/sbms/static/images/off_hys.png) no-repeat; background-size: 100% 100%;}
+.open_clock { background: url(/addons/sbms/static/images/open_clock.png) no-repeat; background-size: 100% 100%;}
+.open_wifi { background: url(/addons/sbms/static/images/open_wifi.png) no-repeat; background-size: 100% 100%;}
+.open_stop { background: url(/addons/sbms/static/images/open_stop.png) no-repeat; background-size: 100% 100%;}
+.open_zc { background: url(/addons/sbms/static/images/open_zc.png) no-repeat; background-size: 100% 100%;}
+.open_yl { background: url(/addons/sbms/static/images/open_yl.png) no-repeat; background-size: 100% 100%;}
+.open_jsf { background: url(/addons/sbms/static/images/open_jsf.png) no-repeat; background-size: 100% 100%;}
+.open_hys { background: url(/addons/sbms/static/images/open_hys.png) no-repeat; background-size: 100% 100%;}
+.details-multiple { height: auto; word-break:break-all; color: #8A8A8A; padding: 2rem 1rem;}
+
+.room-list-item { margin-left: 1rem; margin-right: 1rem; width: calc(100% - 2rem); display: flex; height: 10rem; padding-top: 1rem; padding-bottom: 1rem; border-bottom: solid 1px #DADADA;}
+.room-item-img,.room-item-img img { width: 8.5rem; height: 7rem;}
+.room-item-img img { margin-top: 0.5rem;}
+.room-item-list { margin-left: 0.5rem; width: calc(100% - 16rem);}
+.list-item-li { font-size: 1.2rem; color: #8A8A8A; height: 1.8rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.title-show { font-size: 2rem; color: #000000; height: 2.6rem; font-weight: bold; line-height: 2.6rem;}
+.room-item-price { width: 7rem; color: #00A388; font-size: 2rem; text-align: center;}
+.room-item-price span { font-size: 0.8rem;}
+.room-item-price .price { height: 4rem; line-height: 4rem;}
+.btn-check-in { color: #FFFFFF; background-color: #00A388; width: 100%;}
+
+.hotal-assess { padding: 1rem 1rem; border-bottom: solid 1px #8A8A8A; overflow: hidden;}
+.hotal-assess .assess-info { height: 35px; width: 100%;}
+.hotal-assess .assess-info .assess-head { float: left; width: 30px; height: 30px;}
+.hotal-assess .assess-info .assess-head img { width: 100%; height: 100%;}
+.hotal-assess .assess-info .assess-realname { float: left; width: 100%; margin-left:-30px; margin-right:-100px; height:30px; line-height:30px; overflow:hidden;}
+.hotal-assess .assess-info .assess-realname .inner { margin-left:35px; margin-right:100px; overflow:hidden;}
+.hotal-assess .assess-info .assess-level { width:100px; float:right; margin-left:-100px; text-align:right; height:30px; line-height:30px; color:#ff6600;}
+.hotal-assess .assess-info .assess-level i { width:13px;}
+.hotal-assess .assess-content { overflow:hidden; color:#555; font-size:13px; padding-left:5px;}
+.hotal-assess .assess-createtime { padding:5px; color:#666; font-size:13px; padding-left:5px;}
+.hotal-assess .assess-imgs { overflow:hidden; padding-top:5px; padding-left:5px;}
+.hotal-assess .assess-imgs .assess-img { padding:1px; border:1px solid #ccc; float:left; margin-right:5px;}

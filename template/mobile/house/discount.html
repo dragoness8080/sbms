@@ -1,0 +1,222 @@
+{template 'common/header_base'}
+<link rel="stylesheet" type="text/css" href="../addons/sbms/static/css/calendar.css" />
+<style rel="stylesheet" type="text/css">
+    .calendar { height: 400px; position: fixed; bottom: 0; left: 0; z-index: 200; opacity: 1; }
+</style>
+<div id="container">
+    <div class="search-nav">
+        <div class="nav-tabs" id="checkinout" data-id="reserve">
+            <input type="hidden" id="dt_start" name="dt_start" value="{$dt_start}" />
+            <input type="hidden" id="dt_end" name="dt_end" value="{$dt_end}" />
+            <input type="hidden" id="days" name="days" value="{$days}" />
+            <div class="search-content"><span id="check_in_date">{$startArr}</span><br /><span id="all_days">{$days}天</span></div>
+            <div class="search-sort"><i class="fa fa-sort-desc"></i></div>
+        </div>
+        <div class="nav-tabs" data-id="orderby">
+            <div class="search-content">综合排序</div>
+            <div class="search-sort"><i class="fa fa-sort-desc"></i></div>
+        </div>
+        <div class="nav-tabs" data-id="area">
+            <div class="search-content">城市/地区</div>
+            <div class="search-sort"><i class="fa fa-sort-desc"></i></div>
+        </div>
+        <div class="nav-tabs" data-id="screen">
+            <div class="search-content">筛选</div>
+            <div class="search-srot"><i class="fa fa-sort-desc"></i></div>
+        </div>
+    </div>
+    <div id="list"></div>
+</div>
+<script type="text/javascript" src="../addons/sbms/static/js/area/cascade.js" charset="UTF-8" ></script>
+<script type="text/html" id="house_list">
+    <%each list as h %>
+    <div class="club-list-item" data-id="<%h.id%>">
+        <div class="list-item-image"><img src="<%h.ewm_logo%>" /></div>
+        <div class="list-item-content">
+            <div class="item-hotal-title"><%h.name%></div>
+            <div class="item-hotal-score">
+                <div class="hotal-score"><span id="score">4.9</span>分</div>
+                <div class="hotal-desc">酒店介绍</div>
+            </div>
+            <dvi class="item-hotal-distance">
+                <div class="hotal-distance"><%h.address%></div>
+                <div class="hotal-range"></div>
+            </dvi>
+            <div class="item-hotal-price">
+                <div class="hotal-tag"></div>
+                <div class="hotal-price"><i class="hotal-price-small">&yen;</i><span class="hotal-price-max"><%h.zd_money%></span><i class="hotal-price-small">起</i></div>
+            </div>
+        </div>
+    </div>
+    <%/each%>
+</script>
+<script type="text/html" id="house_empty">
+    <div class="club-list-empty">
+        <div class="empty-item-img"></div>
+        <div class="empty-item-text">没有找到数据。</div>
+    </div>
+</script>
+
+<div id="orderby" class="pop-window">
+    <div class="order-list">
+        <ul>
+            <li class="order-list-item {if $orderby == 'distance_desc'}active{/if}" data-orderby="distance_desc">距离优先</li>
+            <li class="order-list-item " data-orderby="">好评优先</li>
+            <li class="order-list-item {if $orderby == 'price_asc'}active{/if}" data-orderby="price_asc">低价优先</li>
+            <li class="order-list-item {if $orderby == 'price_desc'}active{/if}" data-orderby="price_desc">高价优先</li>
+            <li class="order-list-item {if $orderby == 'hot_desc'}active{/if}" data-orderby="hot_desc">人气优先</li>
+        </ul>
+    </div>
+</div>
+
+<div id="reserve" class="pop-window">
+    <div class="calendar"></div>
+</div>
+
+<div id="area" class="pop-window">
+
+</div>
+
+<div id="screen" class="pop-window"></div>
+<script type="text/javascript" src="../addons/sbms/static/js/date.js"></script>
+<script type="text/javascript">
+    var loading = false;
+    var stop = true;
+    var params = new Object();
+    params.orderby = '{$orderby}';
+    params.dt_start = '{$dt_start}';
+    params.dt_end = '{$dt_end}';
+    params.page = '{$page}';
+
+    require(['core','tpl'],function (core,tpl) {
+        core.json('house/discount',JSON.stringify(params),function (res) {
+            if(res.status == 1){
+                $('#list').html(tpl('house_list',res.result));
+                loading = false;
+                params.page = 1;
+                if(res.result.list.length <= 0){
+                    loading = true;
+                    $(window).scroll = null;
+                    $('#list').html(tpl('house_empty'));
+                    return;
+                }
+                bindEvents();
+                stop = true;
+                bindMore();
+            }
+        },true);
+
+        function bindEvents() {
+            $('.club-list-item').unbind('click').click(function () {
+                location.href = core.getUrl('house/hotal', {id: $(this).data('id')});
+            });
+        }
+
+        function bindMore() {
+            $(window).scroll(function () {
+                if(loading){    return;}
+                var totalHeight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+                if($(document).height() <= totalHeight){
+                    if(stop){
+                        stop = false;
+                        $('#list').append('<div class="list-laoding"><i class="fa fa-spinner fa-spin"></i>正在加载更多商品</div>');
+                        if(params.page == '' || params.page == 'undefined'){
+                            params.page = 1;
+                        }
+                        params.page ++ ;
+                    }
+                }
+            });
+        }
+
+        function getMoreHotal() {
+            core.json('house/discount', JSON.stringify(params), function (res) {
+                if(res.status == 1){
+                    $('#list').append(tpl('house_list'), res.result);
+                    bindEvents();
+                    $('.list-laoding').remove();
+                    if(res.result.list.length < res.result.pageCount){
+                        $('#list').append('<div class="list-laoding">已加载全部民宿</div>');
+                        loading = true;
+                        $(window).scroll = null;
+                        return;
+                    }
+                    stop = true;
+                    bindEvents();
+                }
+            },true);
+        }
+
+        $('.nav-tabs').click(function () {
+            $(this).find('.fa-sort-desc').removeClass('fa-sort-desc').addClass('fa-sort-up');
+            var id = $(this).data('id');
+            $("#" + id).show();
+        });
+        $('.order-list-item').click(function () {
+            var orderby = $(this).data('orderby');
+            $('.order-list-item.active').removeClass('active');
+            $(this).addClass('active');
+            $('.pop-window').hide();
+            params['orderby'] = orderby;
+        });
+        $('.pop-window').click(function () {
+            $('.pop-window').hide();
+        });
+        $('#reserve').on('click',function (e) {
+            if(e.target.id == 'reserve'){
+                $('.calendar').slideUp(200);
+                $('#reserve').fadeOut(200);
+            }
+        });
+        $('#checkinout').calendarSwitch({
+            selectors : {
+                sections : ".calendar"
+            },
+            index : 4,      //展示的月份个数
+            animateFunction : "slideToggle",        //动画效果
+            controlDay:true,//知否控制在daysnumber天之内，这个数值的设置前提是总显示天数大于90天
+            daysnumber : "90",     //控制天数
+            comeColor : "#2EB6A8",       //入住颜色
+            outColor : "#2EB6A8",      //离店颜色
+            comeoutColor : "#E0F4F2",        //入住和离店之间的颜色
+            startid: 'dt_start',
+            endid: 'dt_end',
+            dayid: 'days',
+            callback: function () {
+                $('#reserve').fadeOut(200);
+                var startDate = $('#dt_start').val();  //入住的天数
+                var endDate = $('#dt_end').val();      //离店的天数
+                var NumDate = $('#days').val();    //共多少晚
+                var startDateArr = startDate.split('-');
+
+                $('#check_in_date').text(parseInt(startDateArr[1]) + "月" + parseInt(startDateArr[2]) + "日");
+                $('#all_days').text(NumDate);
+
+                params.dt_start = startDate;
+                params.dt_end = endDate;
+
+                core.json('house/discount',JSON.stringify(params),function (json) {
+                    if(json.status == 1){
+                        $('#list').html(tpl('house_list'),json.result);
+                        loading = false;
+                        params.page = 1;
+                        if(json.result.list.length <= 0){
+                            loading = true;
+                            $(window).scroll = null;
+                            $('#list').html(tpl('house_empty'));
+                            return;
+                        }
+                        bindEvents();
+                        stop = true;
+                        bindMore();
+                    }
+                },true);
+            },
+            comfireBtn:'.comfire'//确定按钮的class或者id
+        });
+    });
+
+</script>
+
+{php $reservation=true}
+{template 'common/footer_base'}

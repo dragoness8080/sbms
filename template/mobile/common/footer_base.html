@@ -1,0 +1,25 @@
+<div class="footer-menu">
+    <div class="reservation {if $reservation}active{/if}" data-url="{php echo $this->createMobileUrl('home/home')}">
+        <i class="fa fa-building"></i>
+        预定
+    </div>
+    <div class="discovery {if $discovery}active{/if}" data-url="{php echo $this->createMobileUrl('home/home')}">
+        <i class="fa fa-search-plus"></i>
+        发现
+    </div>
+    <div class="member-center {if $memberCenter}active{/if}" data-url="{php echo $this->createMobileUrl('home/home')}">
+        <i class="fa fa-user"></i>
+        我的
+    </div>
+</div>
+<script type="text/javascript">
+    function clickFooterMenu() {
+        var url = $(this).data('url');
+        location.href = url;
+    }
+
+    $('.reservation').bind('click',clickFooterMenu);
+    $('.discovery').bind('click',clickFooterMenu);
+    $('.member-center').bind('click',clickFooterMenu)
+</script>
+{template 'common/footer'}

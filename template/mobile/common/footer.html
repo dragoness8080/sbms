@@ -1,0 +1,55 @@
+<script id='tpl_show_message' type='text/html'><div class="sweet-alert" style="display:block;">
+    <%if type=='error'%><div class="icon error animateErrorIcon" style="display: block;"><span class="x-mark animateXMark"><span class="line left"></span><span class="line right"></span></span></div><%/if%>
+    <%if type=='warning'%><div class="icon warning pulseWarning" style="display: block;"><span class="body pulseWarningIns"></span><span class="dot pulseWarningIns"></span></div><%/if%>
+    <%if type=='success'%><div class="icon success animate" style="display: block;"><span class="line tip animateSuccessTip"></span><span class="line long animateSuccessLong"></span><div class="placeholder"></div><div class="fix"></div></div><%/if%>
+    <div class="info"><%message%><%if url%><br><span>如果您的浏览器没有自动跳转请点击此处</span><%/if%></div>
+
+    <div class="sub"
+        <%if url%>
+            onclick="location.href='<%url%>'"
+        <%else%>
+            <%if js%>
+                onclick="<%js%>"
+            <%else%>
+                onclick="history.back()"
+            <%/if%>
+        <%/if%>
+        >
+        <%if type=='success'%><div class="green">确认</div><%/if%>
+        <%if type=='warning'%><div class="grey">确认</div><%/if%>
+        <%if type=='error'%><div class="red">确认</div><%/if%>
+    </div>
+</script>
+<script>
+    require(['http://res.wx.qq.com/open/js/jweixin-1.0.0.js'],function (wx) {
+        jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || { jsApiList:[] };
+        jssdkconfig.debug = false;
+        jssdkconfig.jsApiList = ['openLocation','getLocation'];
+        wx.config(jssdkconfig);
+        wx.ready(function () {
+            wx.getLocation({
+                type: 'wgs84',
+                success: function (res) {
+                    var latitude = res.latitude; //纬度
+                    var longitude = res.longitude; //经度
+                    var speed = res.speed; //速度 m/s
+                    var accuracy = res.accuracy; //位置精度
+                    require(['core'],function (core) {
+                        core.json('home/query',
+                            {latitude:latitude,longitude:longitude,speed:speed,accuracy:accuracy},
+                            function (res) {
+
+                            }, false, 'post');
+                    });
+                },
+                error: function () {
+                    wx.cancel();
+                }
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>

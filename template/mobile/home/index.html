@@ -1,0 +1,60 @@
+{template 'common/header_base'}
+<style type="text/css">
+    #container { text-align: center; background: #FFFFFF;}
+    .login-box { display: inline-block; margin-top: 3rem; }
+    .login-icon { width: 100px; height: 100px;}
+    .login-text { height: 30px; line-height: 30px;}
+    .menu-box { display: flex; width: 100%; height: 8rem; margin-top: 5rem;}
+    .menu-box .item { display: flex; flex: 1; flex-direction: column;}
+    .menu-box .item1 { display: flex; flex: 0.01; flex-direction: column; justify-content: center; align-items: center;}
+    .item-box { display: flex; height: 4rem; padding-left: 0.5rem; padding-right: 0.5rem;}
+    .item-box-1 { display: flex; flex: 1; justify-content: center; align-items: center;}
+    .item-box-1 img { width: 4rem; height: 4rem;}
+    .item-box-2 { display: flex; flex: 2; flex-direction: column; align-items: flex-start;}
+    .item-box-hit-1 { height: 2rem; line-height: 2rem; font-size: 1rem; color: #0a0a0a;}
+    .item-box-hit-2 { height: 2rem; line-height: 2rem; font-size: 8px; color: #dadada;}
+</style>
+<div id="container">
+    <span class="login-box">
+        <img src="../addons/sbms/template/images/icon_logo.png" class="login-icon" />
+        <div class="login-text">素邦民宿服务中心</div>
+    </span>
+    <div class="menu-box">
+        <div class="item">
+            <a href="{php echo $this->createMobileUrl('home', array('p' => 'home'))}">
+                <div class="item-box">
+                    <div class="item-box-1"><img src="../addons/sbms/template/images/hotel.png" /></div>
+                    <div class="item-box-2">
+                        <div class="item-box-hit-1">民宿预定</div>
+                        <div class="item-box-hit-2">一亿会员的预定</div>
+                    </div>
+                </div>
+            </a>
+            <a href="{php echo $this->createMobileUrl('discovery')}">
+                <div class="item-box">
+                    <div class="item-box-1"><img src="../addons/sbms/template/images/hotel.png" /></div>
+                    <div class="item-box-2">
+                        <div class="item-box-hit-1">发现美宿</div>
+                        <div class="item-box-hit-2">体验飞鱼般的民宿风情</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="item1">
+            <div style="background: #DEDEDE; height: 6rem; width: 1px;">&nbsp;</div>
+        </div>
+        <div class="item">
+            <a href="{php echo $this->createMobileUrl('house', array('p' => 'discount'))}">
+                <div class="item-box">
+                    <div class="item-box-1"><img src="../addons/sbms/template/images/hotel.png" /></div>
+                    <div class="item-box-2">
+                        <div class="item-box-hit-1">限时特惠</div>
+                        <div class="item-box-hit-2">温暖体验</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+{template 'common/footer'}

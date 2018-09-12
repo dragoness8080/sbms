@@ -1,0 +1,48 @@
+body{background-color: #DCDCDC;}
+a{text-decoration: none; color: #8A8A8A;}
+a:hover{text-decoration: none; color: #8A8A8A;}
+
+.footer-menu { display: flex; position: fixed; bottom: 0px; height: 50px; z-index: 10; border-top: solid 1px #999999; width: 100%; font-size: 1rem; color: #999999; background: #FFFFFF;}
+.footer-menu div { flex: 1; justify-content: center; align-items: center; flex-direction: column; display: flex; padding-top: 0.2rem;}
+.footer-menu i { font-size: 2rem;}
+.footer-menu div.active { color: #238E68;}
+
+.search-nav { display: flex; height: 50px; align-items: center; border-bottom: solid 1px #DEDEDE; font-size: 10px;}
+.search-nav .nav-tabs { display: flex; flex: 1; position: relative; padding: 0rem 0.5rem; }
+.nav-tabs { border-bottom: none !important;}
+.search-nav .nav-tabs i { color: #DEDEDE;}
+.search-nav .search-content { flex: 4;}
+.search-nav .search-sort { display: flex; flex-direction: column; flex: 1; justify-content: center;}
+
+.pop-window { width: 100%; height: 100%; position: fixed; left: 0; top: 50px; background: rgba(0,0,0,0.5); z-index: 20; display: none;}
+.order-list { position: fixed; background: #ffffff; border-radius: 0.5rem; width: 80%; height: 170px; margin: auto; top: 0; left: 0; right: 0; bottom: 0; z-index: 30; padding: 10px 5px;}
+.order-list ul {padding: 0;}
+.order-list ul li { list-style-type: none; height: 29px; border-bottom: solid 1px #DEDEDE; padding-left: 10px; line-height: 29px;}
+.order-list ul li.active { color: #238E68;}
+
+#list { height: 100%;}
+
+.club-list-empty { display: flex; flex-direction: column; justify-items: center; align-items: center; padding-top: 10rem;}
+.club-list-empty .empty-item-img { width: 150px; height: 150px; background: url(/addons/sbms/static/images/null_data.png) no-repeat; background-size: 100%;}
+.club-list-empty .empty-item-text { height: 30px; line-height: 30px; font-size: 20px; color: #8A8A8A; margin-top: 1rem; }
+
+.club-list-item { display: flex; width: 100%; height: 140px;}
+.club-list-item .list-item-image { flex: 1.5; display: flex; justify-content: center; align-items: center;}
+.club-list-item .list-item-image img { width: 10rem; height: 10rem;}
+.club-list-item .list-item-content { flex: 2.5; display: flex; flex-direction: column; border-bottom: solid 1px #8A8A8A;}
+.item-hotal-title,.item-hotal-score,.item-hotal-distance,.item-hotal-price { flex: 1; align-items: center;}
+.item-hotal-title { font-size: 1.5rem; display: flex;}
+.item-hotal-score,.item-hotal-distance,.item-hotal-price { display: flex; justify-content: center;}
+.item-hotal-score .hotal-score { flex: 1; color: #fd9215; font-size: 10px;}
+.item-hotal-score .hotal-desc { flex: 3;}
+.item-hotal-distance .hotal-distance { flex: 2; font-size: 0.8rem; color: #8A8A8A;}
+.item-hotal-distance .hotal-range { flex: 1; align-items: right; font-size: 0.6rem; color: #8A8A8A;}
+.item-hotal-price .hotal-tag { flex: 2;}
+.item-hotal-price .hotal-price { flex: 1; align-items: right; color: #fd9215;}
+.hotal-price .hotal-price-small { font-size: 0.4rem;}
+.hotal-price .hotal-price-max { font-size: 1.3rem;}
+
+.page-header-bg { width: 100%; height: 15rem; background: #00A388;}
+.page-nav-list { display: flex; height: 6rem; padding-top: 1rem;}
+.page-nav-list .nav-list-item { flex: 1; font-size: 18px; color: #8A8A8A; display: flex; align-items: center; justify-content: center; border-bottom: solid 1px #8A8A8A;}
+.page-nav-list .on { color: #00A388; border-bottom-color: #00A388;}

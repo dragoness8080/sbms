@@ -1,0 +1,68 @@
+{template 'common/header_base'}
+<link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/member.css" />
+<div id="container">
+    <div class="page-header-bg">
+        <div class="member-info">
+            <div class="member-info-img"><img src="{$member['img']}" class="img-circle" /></div>
+            <div class="member-info-dec">
+                <div class="member-name">{$member['name']}</div>
+                <div class="member-vip">{$levelName}</div>
+            </div>
+        </div>
+    </div>
+    <div class="member-body">
+        <div class="mmeber-float-box">
+            <div class="flex-space"></div>
+            <div class="flex-value">
+                <div class="number">0.00</div>
+                <div class="numbern-title">余额</div>
+            </div>
+            <div class="flex-value">
+                <div class="number">0</div>
+                <div class="numbern-title">积分</div>
+            </div>
+            <div class="flex-value">
+                <div class="number">0</div>
+                <div class="numbern-title">优惠券</div>
+            </div>
+            <div class="flex-space"></div>
+        </div>
+        <div class="member-order-box">
+            <div class="member-order-list">
+                <div class="order-item" data-status="0">
+                    <div class="order-item-img"><img src="../addons/sbms/template/images/order.png" /><div class="order-circle-num">{$orderAll}</div></div>
+                    <div class="order-item-text">全部订单</div>
+                </div>
+                <div class="order-item" data-status="1">
+                    <div class="order-item-img"><img src="../addons/sbms/template/images/pay.png"><div class="order-circle-num">{$orderPay}</div></div>
+                    <div class="order-item-text">待付款</div>
+                </div>
+                <div class="order-item" data-status="5">
+                    <div class="order-item-img"><img src="../addons/sbms/template/images/checkin.png"><div class="order-circle-num">{$orderCheckIn}</div></div>
+                    <div class="order-item-text">待入住</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="member-line">
+            <div class="line-box">
+                <a href="javascript:void(0)">
+                    <span>领取优惠券</span>
+                    <div class="angele-right"><i class="fa fa-angle-right"></i></div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    require(['core'],function (core) {
+        $('.order-item').click(function () {
+            var status = $(this).data('status');
+            location.href = "{php echo $this->createMobileUrl('order')}&status=" + status;
+        });
+    })
+</script>
+
+{php $memberCenter = true}
+{template 'common/footer_base'}
