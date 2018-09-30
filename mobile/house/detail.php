@@ -67,11 +67,21 @@ $pageCount = ($page - 1) * $pageSize;
 if($operation == 'display'){
     if($_W['isajax']){
         if($tp == 'list'){  //房型列表
-            $list = pdo_getall('sbms_room', array('seller_id' => $id, 'state' => 1), array('id','name','price','total_num','img','people','size'), 'id', array('price desc'));
+            $start = strtotime($dt_start);
+            $list = pdo_getall('sbms_room', array('seller_id' => $id, 'state' => 1), array('id','name','price','total_num','logo','people','size'), 'id', array('price desc'));
             foreach ($list as $key => $item){
-                $bool = $model->getFreeRooms($item,$dt_start,$dt_end);
-                if($bool == false)
+                $list[$key]['logo'] = tomedia($item['logo']);
+                $bool = $model->checkRooms($item['id'],$dt_start,$dt_end);
+                if($bool == false){
                     unset($list[$key]);
+                }else{
+                    $price = $model->getRoomPrice($item['id'], $dt_start);
+                    if($price > 0){
+                        $list[$key]['price'] = $price;
+                    }
+                    $num = pdo_getcolumn('sbms_roomnum', array('rid' => $item['id'], 'dateday' => $start), 'nums');
+                    $list[$key]['num'] = $num;
+                }
             }
 
             $rooms = array_slice($list, $pageCount, $pageSize);

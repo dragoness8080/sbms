@@ -20,11 +20,24 @@
         <%if type=='error'%><div class="red">确认</div><%/if%>
     </div>
 </script>
+<?php
+            if (empty($_W['shopshare'])){
+                $set = m('common')->getSystem();
+                $_W['shopshare'] = array(
+                    'title' => $set['pt_name'],
+                    'imgUrl' => tomedia($set['link_logo']),
+                    'desc' => '素邦民宿' ,
+                    'link' => $this->createMobileUrl('home')
+                );
+            }
+?>
 <script>
     require(['http://res.wx.qq.com/open/js/jweixin-1.0.0.js'],function (wx) {
         jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || { jsApiList:[] };
+        window.shareData = {php echo json_encode($_W['shopshare'])};
+
         jssdkconfig.debug = false;
-        jssdkconfig.jsApiList = ['openLocation','getLocation'];
+        jssdkconfig.jsApiList = ['openLocation','getLocation','checkJsApi','onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','showOptionMenu'];
         wx.config(jssdkconfig);
         wx.ready(function () {
             wx.getLocation({
@@ -39,17 +52,23 @@
                             {latitude:latitude,longitude:longitude,speed:speed,accuracy:accuracy},
                             function (res) {
 
-                            }, false, 'post');
+                            }, true, true);
                     });
                 },
                 error: function () {
                     wx.cancel();
                 }
             });
+
+            wx.showOptionMenu();
+            wx.onMenuShareAppMessage(window.shareData);
+            wx.onMenuShareTimeline(window.shareData);
+            wx.onMenuShareQQ(window.shareData);
+            wx.onMenuShareWeibo(window.shareData);
         });
+
+        $('#container').css({width:$(window).width(),height:$(window).height()});
     });
 </script>
-
-
 </body>
 </html>

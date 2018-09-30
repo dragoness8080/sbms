@@ -1,22 +1,23 @@
 {template 'common/header_base'}
+<title>民宿查询</title>
 <link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/home.css" />
-<div id="container">
-    <div class="home-bg"></div>
+<div id="container" style="background: #FFFFFF;">
     <div class="home-body">
+        <div class="home-bg"><img src="{if !empty($_W['system']['bj_logo'])}{php echo tomedia($_W['system']['bj_logo'])}{else}./resource/images/nopic.jpg{/if}" /></div>
         <form method="post" action="{php echo $this->createMobileUrl('house')}" enctype="multipart/form-data">
             <input type="hidden" id="dt_start" name="dt_start" data-year="{$curDateArr[0]}" data-month="{$curDateArr[1]}" data-day="{$curDateArr[2]}" value="{$curDate}" />
             <input type="hidden" id="dt_end" name="dt_end" value="{$nextDate}" data-year="{$nextDateArr[0]}" data-month="{$nextDateArr[1]}" data-day="{$nextDateArr[2]}" />
             <div class="home-box">
                 <div class="home-box-search">
                     <div class="search-div">
-                        <span id="search"></span>
+                        <span id="search"><i class="fa fa-search"></i></span>
                         <input type="text" name="keyword" placeholder="请输入酒店名称/关键字" class="search-input" />
                     </div>
                     <div class="search-line">
                         <div class="line"></div>
                     </div>
                     <div class="search-cur">
-                        <i class="fa fa-search"></i>附近
+                        <i class="fa fa-map-marker"></i>附近
                     </div>
                 </div>
                 <div class="home-date">
@@ -32,7 +33,7 @@
                 <div class="home-day">
                     <div class="check-date" style="flex: 2; border-bottom: solid 1px #dedede;"></div>
                     <div class="check-day">
-                        <span class="days">0</span>天
+                        <span class="days">{$days}</span>天
                     </div>
                     <div class="check-date" style="flex: 2; border-bottom: solid 1px #dedede;"></div>
                 </div>
@@ -47,6 +48,15 @@
         </form>
     </div>
 </div>
+{if $adv}
+<div class="adv">
+    <div class="adv-img">
+        <div class="adv-close"><i class="fa fa-close"></i></div>
+        <a href="{if $adv['state'] == 1}{$adv['src']}{else}javascript:void(0);{/if}"><img src="{php echo tomedia($adv['logo'])}" style="width: 300px; height: 480px;" /></a>
+    </div>
+</div>
+{/if}
+
 <script type="text/javascript" src="../addons/sbms/static/js/iScroll.js" charset="UTF-8" ></script>
 <script type="text/javascript" src="../addons/sbms/static/js/Mdate.js" charset="UTF-8" ></script>
 
@@ -114,6 +124,10 @@
             $('.days').html(0);
         }
     }
+
+    $('.adv-close').unbind('click').click(function () {
+        $('.adv').hide();
+    });
 </script>
 {php $reservation = true}
 {template 'common/footer_base'}

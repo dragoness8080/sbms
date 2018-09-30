@@ -374,6 +374,8 @@ CREATE TABLE `ims_sbms_order` (
   `jj_time` int(11) NOT NULL,
   `voice` int(4) NOT NULL DEFAULT '1',
   `qr_fromid` varchar(50) NOT NULL,
+  `openid` varchar(100) NOT NULL,
+  `is_assess` int(4) DEFAULT 0 COMMENT '是否已评价',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -417,6 +419,8 @@ CREATE TABLE `ims_sbms_room` (
   `state` int(4) NOT NULL DEFAULT '1',
   `classify` int(4) NOT NULL DEFAULT '1',
   `rz_time` varchar(4) NOT NULL,
+  `recommend` int(4) DEFAULT 0 COMMENT '推荐',
+  `special_offer` int(4) DEFAULT 0 COMMENT '特价',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -503,6 +507,11 @@ CREATE TABLE `ims_sbms_seller` (
   `ye_open` decimal(10,2) NOT NULL,
   `wx_open` int(4) NOT NULL DEFAULT '1',
   `dd_open` int(4) NOT NULL DEFAULT '1',
+  `province` varchar(50) NULL,
+  `city` varchar(50) NULL,
+  `area` varchar(50) NULL,
+  `recommend` int(4) DEFAULT 0 COMMENT '推荐',
+  `special_offer` int(4) DEFAULT 0 COMMENT '特价',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -577,6 +586,7 @@ CREATE TABLE `ims_sbms_user` (
   `number` varchar(30) NOT NULL COMMENT '会员卡号',
   `commission` decimal(10,2) NOT NULL,
   `balance` decimal(10,2) NOT NULL,
+  `idcard` varchar(100) NULL COMMENT '身份证号码',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -612,6 +622,32 @@ CREATE TABLE `ims_sbms_withdrawal` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+DROP TABLE IF EXISTS `ims_sbms_discovery`;
+CREATE TABLE `ims_sbms_discovery`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` INT(4) NOT NULL ,
+  `title` VARCHAR(255) NOT NULL COMMENT '发现标题',
+  `logo` VARCHAR(255) NOT NULL COMMENT '发现logo',
+  `content` TEXT COMMENT '介绍',
+  `browse` INT(10) DEFAULT 0 COMMENT '浏览次数',
+  `likes` INT(10) DEFAULT 0 COMMENT '点赞次数',
+  `openid` VARCHAR(100) DEFAULT 0 COMMENT '作者',
+  `createtime` INT(6) DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ims_sbms_discovery_hand`;
+CREATE TABLE `ims_sbms_discovery_hand`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `cid` INT(11) NOT NULL,
+  `uniacid` INT(4) NOT NULL,
+  `openid` VARCHAR(100) DEFAULT 0,
+  `createtime` INT(6) DEFAULT 0,
+  `types` VARCHAR(100) NOT NULL COMMENT '类型',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 ]]></install>
 	<uninstall><![CDATA[DROP TABLE IF EXISTS `ims_sbms_account`;
@@ -643,6 +679,8 @@ DROP TABLE IF EXISTS `ims_sbms_system`;
 DROP TABLE IF EXISTS `ims_sbms_user`;
 DROP TABLE IF EXISTS `ims_sbms_usercoupons`;
 DROP TABLE IF EXISTS `ims_sbms_withdrawal`;
+DROP TABLE IF EXISTS `ims_sbms_discovery`;
+DROP TABLE IF EXISTS `ims_sbms_discovery_hand`;
 ]]></uninstall>
 	<upgrade><![CDATA[upgrade.php]]></upgrade>
 </manifest>

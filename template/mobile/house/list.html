@@ -1,34 +1,37 @@
 {template 'common/header_base'}
+<title>民宿列表</title>
 <link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/home.css" />
-<div id="container" style="padding-left: 5px; padding-right: 5px;">
-    <div class="home-bg"></div>
+<div id="container">
     <div class="home-body">
-        <div class="home-box">
-            <div class="home-date">
-                <div id="check_date_in" class="check-date in">
-                    <div class="date-input">{$dt_start}</div>
-                    <div class="date-input-title">入住日期</div>
+        <div class="home-bg"><img src="{if !empty($_W['system']['bj_logo'])}{php echo tomedia($_W['system']['bj_logo'])}{else}./resource/images/nopic.jpg{/if}" /></div>
+        <div style="padding-left: 5px; padding-right: 5px; float: left;">
+            <div class="home-box" style="margin-top: -5rem;">
+                <div class="home-date">
+                    <div id="check_date_in" class="check-date in">
+                        <div class="date-input">{$dt_start}</div>
+                        <div class="date-input-title">入住日期</div>
+                    </div>
+                    <div id="check_date_out" class="check-date out">
+                        <div class="date-input">{$dt_end}</div>
+                        <div class="date-input-title">退房时间</div>
+                    </div>
                 </div>
-                <div id="check_date_out" class="check-date out">
-                    <div class="date-input">{$dt_end}</div>
-                    <div class="date-input-title">退房时间</div>
+                <div class="home-day padding-bottom-10">
+                    <div class="check-date" style="flex: 2; border-bottom: solid 1px #dedede;"></div>
+                    <div class="check-day">
+                        <span class="days">{$days}</span>天
+                    </div>
+                    <div class="check-date" style="flex: 2; border-bottom: solid 1px #dedede;"></div>
                 </div>
             </div>
-            <div class="home-day padding-bottom-10">
-                <div class="check-date" style="flex: 2; border-bottom: solid 1px #dedede;"></div>
-                <div class="check-day">
-                    <span class="days">{$days}</span>天
-                </div>
-                <div class="check-date" style="flex: 2; border-bottom: solid 1px #dedede;"></div>
-            </div>
-        </div>
 
-        <div class="home-order-list">
-            <div class="home-order-item {if empty($orderby) || $orderby == 'recommend desc'}active{/if}" data-orderby="recommend desc">推荐排序</div>
-            <div class="home-order-item {if $orderby == 'zd_money desc'}active{/if}" data-orderby="zd_money desc">价格排序</div>
-            <div class="home-order-item {if $orderby == 'distance dsec'}active{/if}" data-orderby="distance dsec">距离排序</div>
+            <div class="home-order-list">
+                <div class="home-order-item {if empty($orderby) || $orderby == 'recommend desc'}active{/if}" data-orderby="recommend desc">推荐排序</div>
+                <div class="home-order-item {if $orderby == 'zd_money desc'}active{/if}" data-orderby="zd_money desc">价格排序</div>
+                <div class="home-order-item {if $orderby == 'distance dsec'}active{/if}" data-orderby="distance dsec">距离排序</div>
+            </div>
+            <div class="home-hotal-list"></div>
         </div>
-        <div class="home-hotal-list"></div>
     </div>
 </div>
 <script type="text/html" id="hotal_list">
@@ -38,7 +41,7 @@
         <div class="hotal-item-list">
             <div class="item-list-title"><%h.name%></div>
             <div class="item-list-address"><i class="address-mark"></i><%h.address%></div>
-            <div class="item-list-address"><i class="address-mark-p"></i>距离你<span id="distance">600.00</span>米</div>
+            <div class="item-list-address"><i class="address-mark-p"></i>距离你<span id="distance"><%h.distance%></span>米</div>
         </div>
         <div class="hotal-item-price">
             <span>&yen;</span><%h.zd_money%><span>起</span>
@@ -49,7 +52,7 @@
 <script type="text/html" id="hotal_empty">
     <div class="club-list-empty">
         <div class="empty-item-img"></div>
-        <div class="empty-item-text">没有找到民宿信息。</div>
+        <div class="empty-item-text">未找到匹配的民宿。</div>
     </div>
 </script>
 <script type="text/javascript">
@@ -69,8 +72,8 @@
                 $('.home-hotal-list').html(tpl('hotal_list', res.result));
                 if(res.result.list.length <= 0){
                     loading = true;
-                    $('.home-hotal-list').scroll = null;
-                    $('#home-hotal-list').html(tpl('hotal_empty'));
+                    $(window).scroll = null;
+                    $('.home-hotal-list').html(tpl('hotal_empty'));
                     return;
                 }
 
@@ -138,7 +141,7 @@
                     if(res.result.list.length <= 0){
                         loading = true;
                         $(window).scroll = null;
-                        $('#home-hotal-list').html(tpl('hotal_empty'));
+                        $('.home-hotal-list').html(tpl('hotal_empty'));
                         return;
                     }
 

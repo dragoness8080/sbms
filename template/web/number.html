@@ -13,20 +13,25 @@
                 维护房量 (单击修改房间数量，按回车键确认,只能维护28天内的信息)
             </div>
             <div class="panel-body">
+                <form method="post" action="{php echo $this->createWebUrl('number', array('op' => 'batch_num'))}">
                 <div class="form-group">
-                    <div class="col-sm-9 col-xs-12">
+                    <div class="col-sm-5 col-xs-12">
                         {php echo tpl_form_field_daterange('datelimit',array('starttime'=>date('Y-m-d', $startime),'endtime'=>date('Y-m-d', $endtime)))}
                         <input class="" id="search_button" type="button" value="" style="opacity: 0;" />
+                    </div>
+                    <div class="col-sm-2 col-xs-12">
+                        <button type="submit" class="btn btn-primary">批量维护房量</button>
+                    </div>
                 </div>
+                </form>
             </div>
-        </div>
         
            
             <div class="panel-body table-responsive">
                 <div class="sub-content" id="d_list"></div>
             </div>
      
-    </div>
+        </div>
     </div>
     <input type="hidden" id="hotelid" value="{$hotel_id}" />
     <script type="text/javascript">

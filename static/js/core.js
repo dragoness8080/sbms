@@ -147,7 +147,7 @@ define(['jquery', 'core'], function($, core) {
       core.loading =  function() {
           var u = navigator.userAgent, app = navigator.appVersion;
            if ($('#core_loading').length <= 0) {
-                $('body').append('<div id="core_loading" style="top:50%;left:50%;margin-left:-35px;margin-top:-30px;position:absolute;width:80px;z-index:999999"><img src="../addons/ewei_shop/static/images/loading.svg" width="80" /></div>')
+                $('body').append('<div id="core_loading" style="top:50%;left:50%;margin-left:-35px;margin-top:-30px;position:absolute;width:80px;z-index:999999"><img src="../addons/sbms/static/images/loading.gif" width="80" /></div>')
             }
             else{
                 $('#core_loading').show();

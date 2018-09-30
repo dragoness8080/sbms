@@ -217,7 +217,7 @@ class SbmsModuleWxapp extends WeModuleWxapp {
 			'image/x-png'  
 			);  
     $max_file_size=2000000;     //上传文件大小限制, 单位BYTE  
-    $destination_folder="../attachment/zh_gjjd/".date(Y)."/".date(m)."/".date(d)."/"; //上传文件路径  
+    $destination_folder="../attachment/sbms/".date(Y)."/".date(m)."/".date(d)."/"; //上传文件路径
     if (!is_uploaded_file($_FILES["upfile"]['tmp_name']))  
     //是否存在文件  
     {  
@@ -256,7 +256,7 @@ class SbmsModuleWxapp extends WeModuleWxapp {
    	exit;  
     }  
     $pinfo=pathinfo($destination);  
-    $fname="zh_gjjd/".date(Y)."/".date(m)."/".date(d)."/".$pinfo['basename'];  
+    $fname="sbms/".date(Y)."/".date(m)."/".date(d)."/".$pinfo['basename'];
    // var_dump($pinfo);die;
     echo $fname;
     @require_once (IA_ROOT . '/framework/function/file.func.php');
@@ -610,17 +610,17 @@ global $_W, $_GPC;
 include IA_ROOT.'/addons/sbms/print/dyj.php';
 $orderInfo=pdo_get('sbms_order',array('id'=>$_GPC['order_id']));
 $dyj=pdo_get('sbms_dyj',array('seller_id'=>$orderInfo['seller_id']));
-if($orderInfo['type']==1){
+if($orderInfo['type']==2){
 	$type='微信支付';
 }
-if($orderInfo['type']==2){
+if($orderInfo['type']==3){
 	$type='余额支付';
 }
-if($orderInfo['type']==3){
+if($orderInfo['type']==4){
 	$type='到店支付';
 }
 if($dyj['state']==1){//打印机开启
-	if($dyj['type']==3){
+	if($dyj['type']==4){
   $content = "<BR><BR>";
   $content .= "          ".$dyj['dyj_title']."<BR>";
   $content .= "--------------------------------<BR>";

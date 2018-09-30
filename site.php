@@ -10,13 +10,20 @@ require_once IA_ROOT . '/addons/sbms/defines.php';
 require_once SBMS_PATH_FUNC . 'function.php';
 require_once SBMS_PATH_FUNC . 'core.php';
 
+if(function_exists('m')){
+    $_W['system'] = m('common')->getSystem();
+}
+
 class sbmsModuleSite extends Core {
 
     public function doMobileHome(){ $this->_exce(__FUNCTION__,'index');}
     public function doMobileHouse(){ $this->_exce(__FUNCTION__, 'list');}
     public function doMobileMember(){ $this->_exce(__FUNCTION__, 'center');}
     public function doMobileOrder(){ $this->_exce(__FUNCTION__, 'list');}
-
+    public function payResult($params){  return m('order')->payResult($params);}
+    public function doMobileCoupon(){ $this->_exce(__FUNCTION__, 'list');}
+    public function doMobileUtil(){ $this->_exce(__FUNCTION__,'');}
+    public function doMobileDiscovery(){ $this->_exce(__FUNCTION__,'list');}
 
 	public function doMobileYjRefund(){
 		global $_W, $_GPC;

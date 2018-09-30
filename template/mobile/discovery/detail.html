@@ -1,0 +1,9 @@
+{template 'common/header_base'}
+<title>{$discovery['title']}</title>
+<style type="text/css">
+    .discovery-content { float: left; background: #FFFFFF; padding-left: 5px; padding-right: 5px;}
+</style>
+<div id="container">
+    <div class="discovery-content">{php echo  htmlspecialchars_decode($discovery['content'])}</div>
+</div>
+{template 'common/footer'}

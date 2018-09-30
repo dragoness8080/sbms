@@ -1,9 +1,10 @@
 {template 'common/header_base'}
+<title>民宿详情</title>
 <link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/home.css" />
 <link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/detail.css" />
 <div id="container">
-    <div class="page-header-bg"></div>
     <div class="home-body">
+        <div class="page-header-bg"></div>
         <div class="home-box">
             <div class="page-hotal-info">
                 <div class="page-hotal-img"><img src="{php echo tomedia($hotal['ewm_logo'])}" class="img-rounded" /></div>
@@ -44,7 +45,7 @@
 <script type="text/html" id="room_list">
     <%each list as room%>
     <div class="room-list-item" data-id="<%room.id%>">
-        <div class="room-item-img"><img src="<%room.img%>" class="img-rounded" /></div>
+        <div class="room-item-img"><img src="<%room.logo%>" class="img-rounded" /></div>
         <div class="room-item-list">
             <div class="title-show"><%room.name%></div>
             <div class="list-item-li">剩余房间：<%room.num%> 间</div>
@@ -64,100 +65,134 @@
     <div class="hotal-details">
         <div class="details-title">民宿详情</div>
         <div class="details-list">
-            <div class="details-list-item">民宿名称：<%hotal.name%></div>
-            <div class="details-list-item">民宿地址：<%hotal.province%><%hotal.city%><%hotal.area%><%hotal.address%></div>
-            <div class="details-list-item">联系电话：<%hotal.tel%></div>
-            <div class="details-list-item">办理时间：<%hotal.open_time%></div>
+            <div class="details-list-item">民宿名称：{$hotal['name']}</div>
+            <div class="details-list-item">民宿地址：{$hotal['province']}{$hotal['city']}{$hotal['area']}{$hotal['address']}</div>
+            <div class="details-list-item">联系电话：{$hotal['tel']}</div>
+            <div class="details-list-item">办理时间：{$hotal['handle']}</div>
         </div>
         <div class="details-title">酒店服务</div>
         <div class="details-service">
             <div class="details-service-item">
-                <%if hotal.wake == 1%>
+                {if $hotal['wake'] == 1}
                 <div class="service-img"><i class="open_clock"></i></div>
                 <div class="service-name-open">叫醒服务</div>
-                <%else%>
+                {else}
                 <div class="service-img"><i class="off_clock"></i></div>
                 <div class="service-name">叫醒服务</div>
-                <%/if%>
+                {/if}
             </div>
             <div class="details-service-item">
-                <%if hotal.wifi == 1%>
+                {if $hotal['wifi'] == 1}
                 <div class="service-img"><i class="open_wifi"></i></div>
                 <div class="service-name-open">免费wifi</div>
-                <%else%>
+                {else}
                 <div class="service-img"><i class="off_wifi"></i></div>
                 <div class="service-name">免费wifi</div>
-                <%/if%>
+                {/if}
             </div>
             <div class="details-service-item">
-                <%if hotal.water == 1%>
+                {if $hotal['water'] == 1}
                 <div class="service-img"><i class="open_hot"></i></div>
                 <div class="service-name-open">热水</div>
-                <%else%>
+                {else}
                 <div class="service-img"><i class="off_hot"></i></div>
                 <div class="service-name">热水</div>
-                <%/if%>
+                {/if}
             </div>
             <div class="details-service-item">
-                <%if hotal.park == 1%>
+                {if $hotal['park'] == 1}
                 <div class="service-img"><i class="open_stop"></i></div>
                 <div class="service-name-open">停车</div>
-                <%else%>
+                {else}
                 <div class="service-img"><i class="off_stop"></i></div>
                 <div class="service-name">停车</div>
-                <%/if%>
+                {/if}
             </div>
         </div>
         <div class="details-service">
             <div class="details-service-item">
-                <%if hotal.breakfast == 1%>
+                {if $hotal['breakfast'] == 1}
                 <div class="service-img"><i class="open_zc"></i></div>
                 <div class="service-name-open">早餐</div>
-                <%else%>
+                {else}
                 <div class="service-img"><i class="off_zc"></i></div>
                 <div class="service-name">早餐</div>
-                <%/if%>
+                {/if}
             </div>
             <div class="details-service-item">
-                <%if hotal.unionPay == 1%>
+                {if $hotal['unionPay'] == 1}
                 <div class="service-img"><i class="open_yl"></i></div>
                 <div class="service-name-open">银联</div>
-                <%else%>
+                {else}
                 <div class="service-img"><i class="off_yl"></i></div>
                 <div class="service-name">银联</div>
-                <%/if%>
+                {/if}
             </div>
             <div class="details-service-item">
-                <%if hotal.gym == 1%>
+                {if $hotal['gym'] == 1}
                 <div class="service-img"><i class="open_jsf"></i></div>
                 <div class="service-name-open">健身房</div>
-                <%else%>
+                {else}
                 <div class="service-img"><i class="off_jsf"></i></div>
                 <div class="service-name">健身房</div>
-                <%/if%>
+                <{/if}
             </div>
             <div class="details-service-item">
-                <%if hotal.boardroom == 1%>
+                {if $hotal['boardroom'] == 1}
                 <div class="service-img"><i class="open_hys"></i></div>
                 <div class="service-name-open">会议室</div>
-                <%else%>
+                {else}
                 <div class="service-img"><i class="off_hys"></i></div>
                 <div class="service-name">会议室</div>
-                <%/if%>
+                {/if}
             </div>
         </div>
+        <div class="details-title">酒店政策</div>
+        <div class="details-multiple">{$hotal['policy']}</div>
+        <div class="details-title">酒店简介</div>
+        <div class="details-multiple">{$hotal['introduction']}</div>
     </div>
 </script>
 
 <!-- 民宿评价 -->
 <script type="text/html" id="hotal_evaluate">
-
+    <%each list as assess%>
+    <div class="hotal-assess">
+        <div class="assess-info">
+            <div class="assess-head"><img src="<%assess.thumb%>" class="img-circle" /></div>
+            <div class="assess-realname"><div class='inner'><%assess.realname%></div></div>
+            <div class="assess-level">
+                <%if assess.score>=1%><i class='fa fa-star'></i><%else%><i class='fa fa-star-o'></i><%/if%>
+                <%if assess.score>=2%><i class='fa fa-star'></i><%else%><i class='fa fa-star-o'></i><%/if%>
+                <%if assess.score>=3%><i class='fa fa-star'></i><%else%><i class='fa fa-star-o'></i><%/if%>
+                <%if assess.score>=4%><i class='fa fa-star'></i><%else%><i class='fa fa-star-o'></i><%/if%>
+                <%if assess.score>=5%><i class='fa fa-star'></i><%else%><i class='fa fa-star-o'></i><%/if%>
+            </div>
+        </div>
+        <div class="assess-content"><%assess.content%></div>
+        <%if assess.img != ''%>
+        <div class="assess-imgs">
+            <div class="assess-img"><img src="<%assess.img%>" style='width:30px;height:30px;' /></div>
+        </div>
+        <%/if%>
+        <%if assess.status == 2%>
+        <div class='assess-content' style='margin-top:5px;'><span style='color:#ff6600'>[回复]</span><%assess.reply%></div>
+        <%/if%>
+        <div class="assess-createtime"><%assess.time%></div>
+    </div>
+    <%/each%>
 </script>
 
 <script type="text/html" id="room_empty">
     <div class="club-list-empty">
         <div class="empty-item-img"></div>
         <div class="empty-item-text">对不起，房间已全部被预订。</div>
+    </div>
+</script>
+
+<script type="text/html" id="evaluate_empty">
+    <div class="club-list-empty">
+        <div class="empty-item-text">没有会员对民宿评论。</div>
     </div>
 </script>
 
@@ -179,7 +214,11 @@
                 if($(document).height() <= totalHeight){
                     if(stop){
                         stop = false;
-                        $('.home-hotal-list').append('<div class="list-laoding"><i class="fa fa-spinner fa-spin"></i>正在加载更多商品</div>');
+                        var html = '<div class="list-laoding"><i class="fa fa-spinner fa-spin"></i>正在加载更多商品</div>';
+                        if(params.tp == 'evaluate'){
+                            html = '<div class="list-laoding"><i class="fa fa-spinner fa-spin"></i>正在加载更多评论</div>';
+                        }
+                        $('.home-hotal-list').append(html);
                         if(params.page == '' || params.page == 'undefined'){
                             params.page = 1;
                         }
@@ -196,7 +235,11 @@
                     $('.list-laoding').remove();
                     $('.home-hotal-list').append(tpl('room_list', res.result));
                     if(res.result.list.length < res.result.pageCount){
-                        $('.home-hotal-list').append('<div class="list-laoding">已加载全部民宿</div>');
+                        var html = '<div class="list-laoding">已加载全部民宿</div>';
+                        if(params.tp == 'evaluate'){
+                            html = '<div class="list-laoding">已加载全部评论</div>';
+                        }
+                        $('.home-hotal-list').append(html);
                         loading = true;
                         $(window).scroll = null;
                         return;
@@ -211,7 +254,11 @@
             $(this).addClass('on');
             params.tp = $(this).data('type');
             params.page = 1;
-            runJson();
+            if(params.tp == 'introduce'){
+                $('.home-hotal-list').html(tpl('hotal_info'));
+            }else{
+                runJson();
+            }
         });
 
         function runJson() {
@@ -224,7 +271,7 @@
                         if(res.result.list.length <= 0){
                             loading = true;
                             $(window).scroll = null;
-                            $('#home-hotal-list').html(tpl('room_empty'));
+                            $('.home-hotal-list').html(tpl('room_empty'));
                             return;
                         }
                         stop = true;
@@ -234,14 +281,24 @@
                         $(window).scroll = null;
                         $('.home-hotal-list').html(tpl('room_empty'));
                     }
-                }else if(params.tp == 'introduce'){
+                }else if(params.tp == 'evaluate'){
                     if(res.status == 1){
+                        loading = false;
+                        params.page = 1;
+                        $('.home-hotal-list').html(tpl('hotal_evaluate', res.result));
+                        if(res.result.list.length <= 0){
+                            loading = true;
+                            $(window).scroll = null;
+                            $('.home-hotal-list').html(tpl('evaluate_empty'));
+                            return;
+                        }
+                        stop = true;
+                        bindMore();
+                    }else{
                         loading = true;
                         $(window).scroll = null;
-                        $('.home-hotal-list').html(tpl('hotal_info',res.result));
+                        $('.home-hotal-list').html(tpl('evaluate_empty'));
                     }
-                }else if(params.tp == 'evaluate'){
-
                 }
             },true,true);
         }

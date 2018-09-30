@@ -36,18 +36,26 @@ $days = floor(($endTimes - $startTimes) / 3600 / 24);
 //var_dump($orderBy); die();
 
 if($_W['isajax']){
-    $list = pdo_getall('sbms_seller', $conditions, array('id','name','star','address','zd_money','ewm_logo'),'id', $orderBy);
+    $sort = array();
+    $list = pdo_getall('sbms_seller', $conditions, array('id','name','star','address','zd_money','ewm_logo','coordinates'),'id', $orderBy);
     if($startTimes < $endTimes){
         foreach ($list as $key => $item){
             $list[$key]['ewm_logo'] = tomedia($item['ewm_logo']);
-            $hasRoomsCount = 0; //拥有的空房间数量
+            if(!empty($item['coordinates'])){
+                list($latitude,$longitude) = explode(',', $item['coordinates']);
+                $list[$key]['distance'] = m('common')->distance($latitude,$longitude);
+                //$list[$key]['latitude'] = $_COOKIE['latitude'];
+            }
+            $hasRooms = false; //是否拥有房间
             $rooms = pdo_getall('sbms_room', array('seller_id'=>$key,'uniacid'=>$_W['uniacid']), array('id','total_num'),'id');
             foreach ($rooms as $id => $room){
-                $used = pdo_getcolumn('sbms_roomnum', array('dateday >=' => $startTimes,'dateday <=' => $endTimes), 'count(id) as count');
-                $hasRoomsCount += intval($room['total_num'] - intval($used));
+                $tmp = m('common')->checkRooms($id,$dt_start,$dt_end);
+                if($tmp){   $hasRooms = true;}  //拥有房间
             }
-            if(empty($hasRoomsCount)){ unset($list[$key]);}
+            if(!$hasRooms){ unset($list[$key]);}    //没有房间，不显示酒店
+            if(isset($list[$key])){ $sort[$key] = $item['distance'];}
         }
+        if(strexists($orderBy, 'distance')){    array_multisort($sort,SORT_DESC,$list);}
     }
     $house = array_slice($list, $pageCount, 6);
     show_json(1,array('pageCount' => $pageSize,'list' => $house));

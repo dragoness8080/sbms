@@ -70,6 +70,7 @@ if(checksubmit('submit')){
   $data['ye_open']=$_GPC['ye_open'];
   $data['wx_open']=$_GPC['wx_open'];
   $data['dd_open']=$_GPC['dd_open'];
+  $data['zfb_open'] = $_GPC['zfb_open'];
   $data['user_id']=$_GPC['user_id'];
   $data['province'] = $_GPC['province'];
   $data['city'] = $_GPC['city'];

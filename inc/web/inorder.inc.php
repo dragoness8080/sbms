@@ -65,7 +65,7 @@ if($operation=='rz'){
 			pdo_update('sbms_user',array('level_id'=>$level_id,'type'=>2),array('id'=>$order['user_id']));
 	//echo $level_id;
 		}
-		if($order['type']==3){
+		if($order['type']==4){
 			$this->roomNum($_GPC['id']);
 		}
 		//更改拥金
@@ -78,7 +78,7 @@ if($operation=='rz'){
 if($operation=='jjrz'){
 	$orderInfo=pdo_get('sbms_order',array('id'=>$_GPC['order_id']));
 	$this->jjrzMessage($_GPC['order_id']);
-	if($orderInfo['type']==1){
+	if($orderInfo['type']==2){
 
 	$result=$this->wxrefund($_GPC['order_id']);
     if ($result['result_code'] == 'SUCCESS') {//退款成功
@@ -106,7 +106,7 @@ if($operation=='jjrz'){
         }
     }  
     	//余额支付
-    if($orderInfo['type']==2){
+    if($orderInfo['type']==3){
     	$result=$this->saveRecharge($_GPC['order_id']);
     	if($result==1){
     		pdo_update('sbms_order',array('status'=>9,'jj_time'=>time()),array('id'=>$_GPC['order_id']));
@@ -115,7 +115,7 @@ if($operation=='jjrz'){
     	}
     }    
         //到店付款
-    if($orderInfo['type']==3){   
+    if($orderInfo['type']==4){
     	pdo_update('sbms_order',array('status'=>9,'jj_time'=>time()),array('id'=>$_GPC['order_id']));
     	message('拒绝入住成功',$this->createWebUrl('inorder',array()),'success');
     	
@@ -123,7 +123,7 @@ if($operation=='jjrz'){
 }
 if($operation=='refund'){
 	$orderInfo=pdo_get('sbms_order',array('id'=>$_GPC['order_id']));
-	if($orderInfo['type']==1){
+	if($orderInfo['type']==2){
 	$result=$this->wxrefund($_GPC['order_id']);
     if ($result['result_code'] == 'SUCCESS') {//退款成功
         //更改订单操作
@@ -148,7 +148,7 @@ if($operation=='refund'){
         }
 }
         	//余额支付
-    if($orderInfo['type']==2){
+    if($orderInfo['type']==3){
     	$result=$this->saveRecharge($_GPC['order_id']);
     	if($result==1){
     		pdo_update('sbms_order',array('status'=>7),array('id'=>$_GPC['order_id']));
@@ -189,7 +189,7 @@ if($operation=='query'){
 if($operation=='jjorder'){
 	$orderInfo=pdo_get('sbms_order',array('id'=>$_GPC['order_id']));
 	$this->rejectOrderMessage($_GPC['order_id']);
-	if($orderInfo['type']==1){
+	if($orderInfo['type']==2){
 	$result=$this->wxrefund($_GPC['order_id']);
     if ($result['result_code'] == 'SUCCESS') {//退款成功
         //更改订单操作
@@ -214,7 +214,7 @@ if($operation=='jjorder'){
         }
     }  
     	//余额支付
-    if($orderInfo['type']==2){
+    if($orderInfo['type']==3){
     	$result=$this->saveRecharge($_GPC['order_id']);
     	if($result==1){
     		pdo_update('sbms_order',array('status'=>9,'jj_time'=>time()),array('id'=>$_GPC['order_id']));
@@ -223,10 +223,31 @@ if($operation=='jjorder'){
     	}
     }    
     //到店付款
-    if($orderInfo['type']==3){   
+    if($orderInfo['type']==4){
     	pdo_update('sbms_order',array('status'=>9,'jj_time'=>time()),array('id'=>$_GPC['order_id']));
     	message('拒绝成功',$this->createWebUrl('inorder',array()),'success');
     	
     }  
+}
+if($operation == 'cashpay'){
+    $orderId = intval($_GPC['order_id']);
+    $order = pdo_get('sbms_order', array('id' => $orderId, 'uniacid' => $_W['uniacid'], 'type' => 4));
+    if(empty($order)){
+        message('没有找到订单','','error');
+    }else{
+        $paylog = pdo_get('core_paylog', array('tid' => $order['out_trade_no'], 'module' => 'sbms'));
+        if(empty($paylog)){
+            message('支付错误','','error');
+        }else{
+            if($paylog['status'] == 1){
+                message('已支付','','error');
+            }else{
+                pdo_update('sbms_order', array('status' => 2), array('id' => $orderId, 'uniacid' => $_W['uniacid']));
+                pdo_update('core_paylog', array('status' => 1,'type' => 'cash'), array('plid' => $paylog['plid']));
+                message('支付成功',$this->createWebUrl('inorder',array()),'success');
+            }
+        }
+    }
+
 }
 include $this->template('web/inorder');

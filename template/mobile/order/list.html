@@ -1,0 +1,111 @@
+{template 'common/header_base'}
+<link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/order.css" />
+<style type="text/css">
+    .page-nav-list { padding-top: 0; height: 5rem;}
+    .page-nav-list .nav-list-item { border-bottom-color: #E0E0E0;}
+    .page-nav-list .on { border-bottom-color: #00A388;}
+</style>
+<title>订单列表</title>
+<div id="container">
+    <div class="page-nav-list">
+        <div class="nav-list-item {if $status == 0}on{/if}" data-status="0">全部订单</div>
+        <div class="nav-list-item {if $status == 1}on{/if}" data-status="1">待支付</div>
+        <div class="nav-list-item {if $status == 2}on{/if}" data-status="2">待入住</div>
+    </div>
+    <div id="list"></div>
+</div>
+<script type="text/html" id="order_list">
+<%each list as order%>
+<div class="order-list-item" data-orderid="<%order.id%>">
+    <div class="order-list-info">
+        <div class="order-room-img"><img src="<%order.img%>" class="img-rounded" /></div>
+        <div class="order-room-info">
+            <div class="hotal-title"><%order.seller_name%></div>
+            <div class="room-info">房型：<%order.room_type%></div>
+            <div class="room-info">床型：<%order.bed_type%></div>
+            <div class="room-info">入住：<%order.arrival_time%>&nbsp;离店：<%order.departure_time%></div>
+        </div>
+    </div>
+    <div class="order-list-operation">
+        <div class="order-price">&yen;<%order.price%></div>
+        <div class="order-status"><%order.statusStr%></div>
+    </div>
+</div>
+<%/each%>
+</script>
+<script type="text/html" id="order_empty">
+<div class="order-empty">
+    <div class="img"><img src="../addons/sbms/static/images/order_empty.png" /></div>
+    <div class="txt">暂无订单</div>
+</div>
+</script>
+
+<script type="text/javascript">
+    require(['core','tpl'], function (core,tpl) {
+        var loadding = false;
+        var stop = true;
+        var params = new Object();
+        params.status = 0;
+        params.page = 1;
+
+        jsonOrder();
+
+        $('.nav-list-item').click(function () {
+            $('.nav-list-item').removeClass('on');
+            $(this).addClass('on');
+            params.status = $(this).data('status');
+            jsonOrder();
+        });
+
+        function jsonOrder() {
+            core.json('order/list', params, function (res) {
+                var result = res.result;
+                if(res.status != 1 || result.list.length <= 0){
+                    loadding = true;
+                    $(window).scroll = null;
+                    $('#list').html(tpl('order_empty'));
+                    return;
+                }
+
+                params.page = 1;
+                loadding = false;
+                stop = true;
+                $('#list').html(tpl('order_list', result));
+
+                $(window).scroll(function () {
+                    if(loadding){ return;}
+                    var totalHeight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+                    if($(document).height() <= totalHeight){
+                        if(stop){
+                            stop = false;
+                            $('#list').append('<div class="list-laoding"><i class="fa fa-spinner fa-spin"></i>正在加载更多订单</div>');
+                            if(params.page == '' || params.page == 'undefined'){
+                                params.page = 1;
+                            }
+                            params.page ++;
+                        }
+                        core.json('order/list', params, function (jres) {
+                            if(jres.status == 1){
+                                $('.list-laoding').remove();
+                                $('#list').append(tpl('order_list', jres.result));
+                                if(jres.result.list.length < jres.result.pagesize){
+                                    $('#list').append('<div class="list-laoding">已加载全部订单</div>');
+                                    loadding = true;
+                                    $(window).scroll = null;
+                                    return;
+                                }
+                                stop = true;
+                            }
+                        },true,true);
+                    }
+                });
+
+                $('.order-list-item').unbind('click').click(function () {
+                    location.href = core.getUrl('order/detail', {orderid:$(this).data('orderid')});
+                });
+
+            },true,true);
+        }
+    });
+</script>
+{template 'common/footer'}

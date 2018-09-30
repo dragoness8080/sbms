@@ -371,12 +371,16 @@
                            <span class="font1">预订</span>
                        </p> -->
                         <p><span>付款类型：</span>
-                        <span class="conten_font2">{if $list['type']==1}微信支付</span>
-                        {elseif $list['type']==2}
-                        <span class="conten_font2">余额支付</span>
-                        {else}
-                        <span class="conten_font2">到店支付</span>
-                        {/if}</p>
+                        {if $list['type'] == 1}
+                            <span class="conten_font2">支付宝支付</span>
+                        {elseif $list['type'] == 2}
+                            <span class="conten_font2">微信支付</span>
+                        {elseif $list['type'] == 3}
+                            <span class="conten_font2">余额支付</span>
+                        {elseif $list['type'] == 4}
+                            <span class="conten_font2">到店支付</span>
+                        {/if}
+                        </p>
                     </div>
                     <div class="info_left_content">
                         <p><span>下单时间：</span>{php echo date('Y-m-d H:i:s',$list['time'])}</p>
@@ -504,6 +508,9 @@
 <div class="form-group">
 
     <div class="col-sm-offset-2 col-sm-10">
+        {if $list['status'] == 1 && $list['type'] == 4}
+        <a class="btn btn-warning" style="vertical-align: baseline" href="{php echo $this->createWebUrl('inorder', array('order_id' => $list['id'], 'op' => 'cashpay'));}">确认支付</a>
+        {/if}
         {if $list['status']==2 && $sys['is_order']==1 or $list['type']==3&&$list['status']==1&& $sys['is_order']==1}
          <a class="btn btn-info"  style="vertical-align: baseline" href="{php echo $this->createWebUrl('inorder',array('order_id'=>$list['id'],'op'=>'query'));}"> 确认订单</a>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

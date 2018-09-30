@@ -53,10 +53,17 @@
                                 <input type="checkbox" name="dd_open" id="optionsRadios4"  value="1"> 到店支付
                                  {/if}
                         </label>
+                        <label class="checkbox-inline">
+                            {if $list['zfb_open']==1}
+                                <input type="checkbox" name="zfb_open" id="optionsRadios4"  value="1" checked> 支付宝支付
+                            {else}
+                                <input type="checkbox" name="zfb_open" id="optionsRadios4"  value="1"> 支付宝支付
+                            {/if}
+                        </label>
                        
                         <p></p>
                         <div class="help-block">
-                        * 备注：默认三种支付都支持
+                        * 备注：默认四种支付都支持
                         </div>
                     </div>
                 </div>

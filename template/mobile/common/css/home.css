@@ -5,14 +5,16 @@
 .list-laoding { height: 3rem; line-height: 3rem; text-align: center; font-size: 1.5rem; color: #333333;}
 
 input[type] { height: inherit; padding: 0 0; margin-bottom: 0; line-height: normal; border: none;}
-.home-bg { width: 100%; height: 25rem;}
-.home-box { margin-left: 1rem; margin-right: 1rem; margin-top: -10rem; padding: 0rem 1rem; width: calc(100% - 2rem); background: #ffffff; border-radius: 0.5rem; box-shadow: 0px 0px 5px #cdcdcd;}
-.home-box-search { height: 5rem; display: flex; border-bottom: solid 1px #bcbcbc; align-items: center;}
+.home-body { background: #FFFFFF; float: left; width: 100%;}
+.home-bg { width: 100%; height: 20rem; float: left;}
+.home-bg img { width: 100%; height: 20rem;}
+.home-box { margin-left: 1rem; margin-right: 1rem; margin-top: -10rem; padding: 0rem 1rem; width: calc(100% - 2rem); background: #ffffff; border-radius: 0.5rem; box-shadow: 0px 0px 5px #cdcdcd; float: left;}
+.home-box-search { height: 5rem; display: flex; border-bottom: solid 1px #bcbcbc; align-items: center; color: #cdcdcd;}
 .search-div { display: flex; flex: 3; height: 3rem; align-items: center;}
 .search-cur { display: flex; flex: 1; height: 3rem; align-items: center; padding-left: 1rem;}
 .search-line { display: flex; flex: 0.02; align-items: center;}
 .search-line .line { height: 1.5rem; background: #cdcdcd; width: 1px;}
-#search { width: 1.5rem; height: 1.5rem; background: url("../addons/sbms/template/images/search.png") no-repeat; background-size: 100% 100%;}
+#search { width: 1.5rem; height: 1.5rem;}
 .search-input { width: 100%; height: 3rem; padding-left: 0.5rem;}
 .search-input::-webkit-input-placeholder { color: #cdcdcd;}
 .page-hotal-info { display: flex; height: 8rem; border-bottom: solid 1px #bcbcbc; padding-top: 1rem; padding-bottom: 1rem;}
@@ -25,7 +27,7 @@ input[type] { height: inherit; padding: 0 0; margin-bottom: 0; line-height: norm
 .home-date { display: flex; flex-direction: row; padding-top: 2rem; padding-bottom: 1rem;}
 .check-date { display: flex; flex: 1; flex-direction: column; align-items: center;}
 .in { border-right: solid 1px #cdcdcd;}
-.date-input { height: 3rem; flex-direction: column; font-size: 2rem; color: #1A7E1E; display: flex;}
+.date-input { height: 3rem; flex-direction: column; font-size: 2rem; color: #1C9488; display: flex;}
 .date-input-title { height: 1.5rem; line-height: 1.5rem; font-size: 0.8rem; display: flex;}
 
 .home-day { display: flex;}
@@ -38,16 +40,22 @@ input[type] { height: inherit; padding: 0 0; margin-bottom: 0; line-height: norm
 
 .padding-bottom-10 { padding-bottom: 10px;}
 
-.home-order-list { display: flex; padding-top: 5px; padding-bottom: 10px; border-bottom: solid 1px #8A8A8A;}
+.home-order-list { display: flex; padding-top: 10px; padding-bottom: 10px; border-bottom: solid 1px #F4F4F4; width: 100%; float: left;}
 .home-order-list .home-order-item { flex: 1; font-size: 18px; color: #8A8A8A; display: flex; align-items: center; justify-content: center;}
 .home-order-list .active { color: #0AA5DF;}
 
-.home-hotal-list { height: 100%; background: #FFFFFF;}
-.hotal-list-item { width: 100%; height: 7rem; padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: solid 1px #8A8A8A;display: flex;}
-.hotal-item-img { width: 6.5rem; height: 6rem; border-radius: 2px;}
+.home-hotal-list { height: 100%; background: #FFFFFF; width: 100%; float: left;}
+.hotal-list-item { width: 100%; height: 8rem; padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: solid 1px #F4F4F4;display: flex;}
+.hotal-item-img { width: 6.5rem; height: 7rem; border-radius: 2px; display: flex; align-items: center; justify-content: center;}
 .hotal-item-img img { width: 6.5rem; height: 6rem}
 .hotal-item-list { margin-left: 0.5rem; width: calc(100% - 14rem);}
-.item-list-title { font-size: 2rem; color: #000000; font-weight: bold; height: 3rem; line-height: 3rem;}
-.item-list-address { font-size: 1.2rem; color: #8A8A8A; height: 1.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
-.hotal-item-price { width: 7rem; color: #00A388; font-size: 2rem; line-height: 6rem;}
+.item-list-title { font-size: 1.8rem; color: #000000; font-weight: 700; height: 3rem; line-height: 3rem;}
+.item-list-address { font-size: 1.2rem; color: #8A8A8A; height: 2rem; line-height: 2rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.hotal-item-price { width: 7rem; color: #00A388; font-size: 1.6rem; line-height: 7rem; display: flex; justify-content: flex-end; padding-right: 5px;}
 .hotal-item-price span { font-size: 0.8rem;}
+
+.adv { position: absolute; width: 100%; height: 100%; left: 0; top: 0; background: rgba(0,0,0,0.5); z-index: 10; display: flex; align-items: center; justify-content: center;}
+.adv .adv-img { z-index: 11; width: 300px; height: 480px; background: #FFFFFF; position: relative;}
+.adv .adv-img .adv-close { position: absolute; width: 20px; height: 20px; color: #FF0000; right: -20px; top: -25px;}
+.adv .adv-img .adv-close i { font-size: 25px;}
+

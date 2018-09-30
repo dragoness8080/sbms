@@ -30,3 +30,56 @@ function show_json($status = 1, $return = null) {
     }
     die(json_encode($ret));
 }
+
+function is_weixin() {
+    if (empty($_SERVER['HTTP_USER_AGENT']) || strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false && strpos($_SERVER['HTTP_USER_AGENT'], 'Windows Phone') === false) {
+        return false;
+    }
+    return true;
+}
+
+function save_media($url)
+
+{
+
+    load()->func('file');
+
+    $config = array(
+
+        'qiniu' => false
+
+    );
+
+    $plugin = p('qiniu');
+
+    if ($plugin) {
+
+        $config = $plugin->getConfig();
+
+        if ($config) {
+
+            if (strexists($url, $config['url'])) {
+
+                return $url;
+
+            }
+
+            $qiniu_url = $plugin->save(tomedia($url), $config);
+
+            if (empty($qiniu_url)) {
+
+                return $url;
+
+            }
+
+            return $qiniu_url;
+
+        }
+
+        return $url;
+
+    }
+
+    return $url;
+
+}

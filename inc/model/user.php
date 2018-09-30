@@ -111,4 +111,14 @@ class Sbms_User{
         }
         return $_var_3;
     }
+
+    function followed($openid = ''){
+        global $_W;
+        $_var_24 = !empty($openid);
+        if($_var_24){
+            $fans = pdo_fetch('select follow from ' . tablename('mc_mapping_fans') . ' where openid=:openid and uniacid=:uniacid limit 1', array(':openid' => $openid, ':uniacid' => $_W['uniacid']));
+            $_var_24 = $fans['follow'] == 1;
+        }
+        return $_var_24;
+    }
 }

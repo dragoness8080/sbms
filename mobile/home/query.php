@@ -16,8 +16,12 @@ if($_W['isajax']){
     $accuracy = $_GPC['accuracy']; //精度
 
     $_W['latitude'] = $latitude;
-    $_W['$longitude'] = $longitude;
+    $_W['longitude'] = $longitude;
     $_W['accuracy'] = $accuracy;
+
+    $time = time() + 300;
+    setcookie('latitude', $latitude, $time);
+    setcookie('longitude', $longitude, $time);
 
     show_json(1);
 }

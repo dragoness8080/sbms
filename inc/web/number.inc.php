@@ -4,7 +4,31 @@ global $_GPC, $_W;
 $GLOBALS['frames'] = $this->getMainMenu2();
 $seller_id=$_COOKIE["storeid"];
 $cur_store = $this->getStoreById($seller_id);
+$operation = empty($_GPC['op']) ? 'display' : $_GPC['op'];
+
 $uniacid=$_W['uniacid'];
+if($operation == 'batch_num'){
+    $start = strtotime($_GPC['datelimit']['start']);
+    $end = strtotime($_GPC['datelimit']['end']);
+    if($start < $end){
+        $rooms = pdo_getall('sbms_room', array('seller_id' => $seller_id, 'uniacid' => $uniacid), array('id','total_num'));
+        while ($start <= $end){
+            foreach ($rooms as $room){
+                $num = pdo_getcolumn('sbms_roomnum', array('rid' => $room['id'],'dateday' => $start),'nums');
+                if($num === false){
+                    $data = array(
+                        'rid' => $room['id'],
+                        'nums' => $room['total_num'],
+                        'dateday' => $start
+                    );
+                    pdo_insert('sbms_roomnum', $data);
+                }
+            }
+            $start = strtotime('+1 day', $start);
+        }
+    }
+}
+
 		$version=$_W['current_module']['version'];
 		if($_GPC['ac']=='getDate'){
 			$start = $_GPC['start'];

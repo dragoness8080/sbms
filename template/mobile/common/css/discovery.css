@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+img { width: 100%; height: 100%;}
+.discovery-list { float: left; width: 100%; height: 100%;}
+.discovery-body { float: left; width: 100%; height: 250px; background: #FFFFFF; padding: 5px 10px; margin-bottom: 10px;}
+.discovery-body .discovery-img { width: 100%; height: 180px; float: left;}
+.discovery-body .discovery-title { width: 100%; height: 30px; line-height: 30px; font-size: 16px; color: #333333; float: left;}
+.discovery-body .discovery-info { width: 100%; height: 30px; color: #8A8A8A; float: left;}
+.discovery-body .discovery-info div { float: left;}
+.discovery-body .discovery-info .author { width: 60%; height: 30px;}
+.discovery-body .discovery-info .browse,  .discovery-body .discovery-info .likes { width: 20%; height: 30px; line-height: 30px; text-align: center;}
+.discovery-body .discovery-info .likes { text-align: right;}

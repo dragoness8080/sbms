@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+.list-body { padding-left: 5px; padding-right: 5px;}
+.coupon-item-body { width: 100%; height: 80px; margin-top: 5px; display: flex;}
+.coupon-header { width: 30%; height: 100%; color: #FFFFFF;}
+.coupon-header .coupon-price { height: 50px; font-size: 16px; line-height: 50px; text-align: center;}
+.coupon-header .coupon-price span { font-size: 10px; -webjit-text-size-adjust: none;}
+.coupon-header .coupon-introduce { height: 30px; font-size: 10px; text-align: center; line-height: 30px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; -webjit-text-size-adjust: none;}
+.coupon-body { width: 70%; height: 100%; background: #FFFFFF; padding-left: 5px; padding-right: 10px;}
+.coupon-body .coupon-title { height: 50px; border-bottom: solid 1px #F4F4F4;}
+.coupon-body .coupon-title .title { height: 20px; line-height: 20px; font-size: 14px; color: #333333;}
+.coupon-body .coupon-title .own { height: 30px; line-height: 15px; font-size: 12px; color: #8A8A8A;}
+.coupon-body .coupon-op { height: 30px; line-height: 30px; font-size: 10px; -webkit-text-size-adjust: none;}
+.coupon-body .coupon-op .coupon-date { color: #D0D0D0; display: inline;}
+.coupon-body .coupon-op .coupon-btn { display: inline; float: right;}
+.coupon-body .coupon-op .coupon-btn .btn { padding: 1px 3px; font-size: 10px; -webkit-text-size-adjust: none;}

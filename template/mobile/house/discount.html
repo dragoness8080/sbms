@@ -1,5 +1,7 @@
 {template 'common/header_base'}
+<title>优惠列表</title>
 <link rel="stylesheet" type="text/css" href="../addons/sbms/static/css/calendar.css" />
+<link rel="stylesheet" type="text/css" href="../addons/sbms/static/css/address.css" />
 <style rel="stylesheet" type="text/css">
     .calendar { height: 400px; position: fixed; bottom: 0; left: 0; z-index: 200; opacity: 1; }
 </style>
@@ -16,8 +18,8 @@
             <div class="search-content">综合排序</div>
             <div class="search-sort"><i class="fa fa-sort-desc"></i></div>
         </div>
-        <div class="nav-tabs" data-id="area">
-            <div class="search-content">城市/地区</div>
+        <div class="nav-tabs" data-id="area" data-toggle="city-picker">
+            <div class="search-content" id="Addr">城市/地区</div>
             <div class="search-sort"><i class="fa fa-sort-desc"></i></div>
         </div>
         <div class="nav-tabs" data-id="screen">
@@ -25,7 +27,9 @@
             <div class="search-srot"><i class="fa fa-sort-desc"></i></div>
         </div>
     </div>
-    <div id="list"></div>
+    <div class="list-box">
+        <div id="list"></div>
+    </div>
 </div>
 <script type="text/javascript" src="../addons/sbms/static/js/area/cascade.js" charset="UTF-8" ></script>
 <script type="text/html" id="house_list">
@@ -35,16 +39,16 @@
         <div class="list-item-content">
             <div class="item-hotal-title"><%h.name%></div>
             <div class="item-hotal-score">
-                <div class="hotal-score"><span id="score">4.9</span>分</div>
-                <div class="hotal-desc">酒店介绍</div>
+                <div class="hotal-score"><span id="score"><%h.score%></span>&nbsp;分</div>
+                <div class="hotal-desc"></div>
             </div>
             <dvi class="item-hotal-distance">
-                <div class="hotal-distance"><%h.address%></div>
+                <div class="hotal-distance"><%h.province%><%h.city%><%h.area%><%h.address%></div>
                 <div class="hotal-range"></div>
             </dvi>
             <div class="item-hotal-price">
                 <div class="hotal-tag"></div>
-                <div class="hotal-price"><i class="hotal-price-small">&yen;</i><span class="hotal-price-max"><%h.zd_money%></span><i class="hotal-price-small">起</i></div>
+                <div class="hotal-price"><i class="hotal-price-small">&yen;</i>&nbsp;<span class="hotal-price-max"><%h.zd_money%></span><i class="hotal-price-small">&nbsp;起</i></div>
             </div>
         </div>
     </div>
@@ -61,7 +65,6 @@
     <div class="order-list">
         <ul>
             <li class="order-list-item {if $orderby == 'distance_desc'}active{/if}" data-orderby="distance_desc">距离优先</li>
-            <li class="order-list-item " data-orderby="">好评优先</li>
             <li class="order-list-item {if $orderby == 'price_asc'}active{/if}" data-orderby="price_asc">低价优先</li>
             <li class="order-list-item {if $orderby == 'price_desc'}active{/if}" data-orderby="price_desc">高价优先</li>
             <li class="order-list-item {if $orderby == 'hot_desc'}active{/if}" data-orderby="hot_desc">人气优先</li>
@@ -73,13 +76,73 @@
     <div class="calendar"></div>
 </div>
 
-<div id="area" class="pop-window">
-
+<div id="addressSelectWrapper">
+    <div id="addressSelect">
+        <div class="tip">
+            <h3>所在地区</h3>
+            <button type="button" id="cancel"></button>
+        </div>
+        <div id="address">
+            <ul class="selected-address">
+                <li class="lastarea" id="lastprovince">请选择</li>
+                <li class="lastarea" id="lastcity">请选择</li>
+                <li class="lastarea" id="lastarea">请选择</li>
+                <li class="lastarea" id="lasttown">请选择</li>
+            </ul>
+            <div class="address-content">
+                <ul id="province"></ul>
+                <ul id="city"></ul>
+                <ul id="area"></ul>
+                <ul id="town"></ul>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div id="screen" class="pop-window"></div>
+<div id="screen" class="pop-window">
+    <div class="screen-box">
+        <div class="screen-body">
+            <div class="screen-block">
+                <div class="title">民宿</div>
+                <div class="screen-check">
+                    {loop $homestay $home}
+                    <span class="check-box" data-type="sid" data-sid="{$home['id']}">{$home['name']}</span>
+                    {/loop}
+                </div>
+            </div>
+            <div class="screen-block">
+                <div class="title">房型</div>
+                <div class="screen-check">
+                    {loop $housetype $type}
+                    <span class="check-box" data-type="sname" data-sname="{$type['name']}">{$type['name']}</span>
+                    {/loop}
+                </div>
+            </div>
+            <div class="screen-block">
+                <div class="title">服务设施</div>
+                <div class="screen-check">
+                    <span class="check-box {if $services['wake'] == 1}checked{/if}" data-type="service" data-service="wake">叫醒</span>
+                    <span class="check-box {if $services['water'] == 1}checked{/if}" data-type="service" data-service="water">热水</span>
+                    <span class="check-box {if $services['wifi'] == 1}checked{/if}" data-type="service" data-service="wifi">wifi</span>
+                    <span class="check-box {if $services['park'] == 1}checked{/if}" data-type="service" data-service="park">停车</span>
+                    <span class="check-box {if $services['breakfast'] == 1}checked{/if}" data-type="service" data-service="breakfast">早餐</span>
+                    <span class="check-box {if $services['unionPay'] == 1}checked{/if}" data-type="service" data-service="unionPay">银联</span>
+                    <span class="check-box {if $services['gym'] == 1}checked{/if}" data-type="service" data-service="gym">健身房</span>
+                    <span class="check-box {if $services['boardroom'] == 1}checked{/if}" data-type="service" data-service="boardroom">会议室</span>
+                </div>
+            </div>
+        </div>
+        <div class="screen-bottom">
+            <button class="screen-btn cancel" id="reset">重置</button>
+            <button class="screen-btn ok" id="gotoclick">确定</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../addons/sbms/static/js/area/city.js"></script>
 <script type="text/javascript" src="../addons/sbms/static/js/date.js"></script>
 <script type="text/javascript">
+
     var loading = false;
     var stop = true;
     var params = new Object();
@@ -87,9 +150,12 @@
     params.dt_start = '{$dt_start}';
     params.dt_end = '{$dt_end}';
     params.page = '{$page}';
+    params.province = "{$province}";
+    params.city = "{$city}";
+    params.area = "{$area}";
 
     require(['core','tpl'],function (core,tpl) {
-        core.json('house/discount',JSON.stringify(params),function (res) {
+        core.json('house/discount',params,function (res) {
             if(res.status == 1){
                 $('#list').html(tpl('house_list',res.result));
                 loading = false;
@@ -104,18 +170,18 @@
                 stop = true;
                 bindMore();
             }
-        },true);
+        },true,true);
 
         function bindEvents() {
             $('.club-list-item').unbind('click').click(function () {
-                location.href = core.getUrl('house/hotal', {id: $(this).data('id')});
+                location.href = core.getUrl('house/detail', {id: $(this).data('id'),dt_start:"{$dt_start}",dt_end:"{$dt_end}"});
             });
         }
 
         function bindMore() {
             $(window).scroll(function () {
                 if(loading){    return;}
-                var totalHeight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+                var totalHeight = parseFloat($(window).height()) + 100 + parseFloat($(window).scrollTop());
                 if($(document).height() <= totalHeight){
                     if(stop){
                         stop = false;
@@ -147,27 +213,121 @@
             },true);
         }
 
-        $('.nav-tabs').click(function () {
+        $('.nav-tabs').click(function (e) {
             $(this).find('.fa-sort-desc').removeClass('fa-sort-desc').addClass('fa-sort-up');
+            $(this).addClass('nav-on');
             var id = $(this).data('id');
-            $("#" + id).show();
+            if(id != 'area'){
+                $("#" + id).show();
+            }else{
+                $("#addressSelectWrapper").show();
+            }
+            e.stopPropagation();
         });
+
         $('.order-list-item').click(function () {
             var orderby = $(this).data('orderby');
             $('.order-list-item.active').removeClass('active');
             $(this).addClass('active');
             $('.pop-window').hide();
-            params['orderby'] = orderby;
+            $('.nav-tabs').removeClass('nav-on').find('.fa-sort-up').removeClass('fa-sort-up').addClass('fa-sort-desc');
+            params.orderby = orderby;
+            params.page = 1;
+            core.json('house/discount',params,function (res) {
+                if(res.status == 1){
+                    $('#list').html(tpl('house_list',res.result));
+                    loading = false;
+                    params.page = 1;
+                    if(res.result.list.length <= 0){
+                        loading = true;
+                        $(window).scroll = null;
+                        $('#list').html(tpl('house_empty'));
+                        return;
+                    }
+                    bindEvents();
+                    stop = true;
+                    bindMore();
+                }
+            },true,true);
         });
+
+
         $('.pop-window').click(function () {
             $('.pop-window').hide();
+            $('.nav-tabs').removeClass('nav-on').find('.fa-sort-up').removeClass('fa-sort-up').addClass('fa-sort-desc');
         });
+
+
+        //选择筛选内容
+        $('.check-box').click(function (e) {
+            if($(this).hasClass('checked')){
+                $(this).removeClass('checked');
+            }else{
+                $(this).addClass('checked');
+            }
+            e.stopPropagation();
+        });
+
+        //重置
+        $('#reset').click(function (e) {
+            $('.check-box').each(function () {
+                $(this).removeClass('checked');
+            });
+            e.stopPropagation();
+        });
+
+        //筛选查询
+        $('#gotoclick').click(function (e) {
+            var sid = [];
+            var sname = [];
+            var service = [];
+            $('.check-box').each(function () {
+                if($(this).hasClass('checked')){
+                    var type = $(this).data('type');
+                    if(type == 'sid'){
+                        sid.push($(this).data('sid'));
+                    }else if(type == 'sname'){
+                        sname.push($(this).data('sname'));
+                    }else if(type == 'service'){
+                        service.push($(this).data('service'));
+                    }
+                }
+            });
+
+            $('.pop-window').hide();
+            $('.nav-tabs').removeClass('nav-on').find('.fa-sort-up').removeClass('fa-sort-up').addClass('fa-sort-desc');
+
+            params.sid = sid.join(",");
+            params.sname = sname.join(",");
+            params.service = service.join(",");
+            params.page = 1;
+            core.json('house/discount',params,function (res) {
+                if(res.status == 1){
+                    $('#list').html(tpl('house_list',res.result));
+                    loading = false;
+                    params.page = 1;
+                    if(res.result.list.length <= 0){
+                        loading = true;
+                        $(window).scroll = null;
+                        $('#list').html(tpl('house_empty'));
+                        return;
+                    }
+                    bindEvents();
+                    stop = true;
+                    bindMore();
+                }
+            },true,true);
+            e.stopPropagation();
+        });
+
+        //日期显示
         $('#reserve').on('click',function (e) {
             if(e.target.id == 'reserve'){
                 $('.calendar').slideUp(200);
                 $('#reserve').fadeOut(200);
             }
         });
+        //日期查询
         $('#checkinout').calendarSwitch({
             selectors : {
                 sections : ".calendar"
@@ -184,6 +344,7 @@
             dayid: 'days',
             callback: function () {
                 $('#reserve').fadeOut(200);
+                $('.nav-tabs').removeClass('nav-on').find('.fa-sort-up').removeClass('fa-sort-up').addClass('fa-sort-desc');
                 var startDate = $('#dt_start').val();  //入住的天数
                 var endDate = $('#dt_end').val();      //离店的天数
                 var NumDate = $('#days').val();    //共多少晚
@@ -195,7 +356,7 @@
                 params.dt_start = startDate;
                 params.dt_end = endDate;
 
-                core.json('house/discount',JSON.stringify(params),function (json) {
+                core.json('house/discount',params,function (json) {
                     if(json.status == 1){
                         $('#list').html(tpl('house_list'),json.result);
                         loading = false;
@@ -210,13 +371,63 @@
                         stop = true;
                         bindMore();
                     }
-                },true);
+                },true,true);
             },
             comfireBtn:'.comfire'//确定按钮的class或者id
         });
+
+        $("#areaLabel").click(function(e){
+            $("#addressSelectWrapper").show();
+            e.stopPropagation();
+        });
+        $(document).click(function () {
+            $("#addressSelectWrapper").hide();
+        });
+        $("#cancel").click(function () {
+            $("#addressSelectWrapper").hide();
+        });
+        $("#addressSelect").click(function (e) {
+            e.stopPropagation();
+        });
+
+        initAddress();
+
+        function initAddress() {
+            $("#Addr").cityLinkage({
+                containerId: 'addressSelectWrapper',
+                getSelectedCode:function(){return $("#Addr").data("code");},
+                callback:function(data) {
+                    $("#Addr").data("code",data.town.code);
+                    //$("#Addr").html(data.city).data("code",data.town.code);
+                    $('.nav-tabs').removeClass('nav-on').find('.fa-sort-up').removeClass('fa-sort-up').addClass('fa-sort-desc');
+                    params.province = data.province.name;
+                    if(data.city != undefined){
+                        params.city = data.city.name;
+                    }
+                    params.area = data.area.name;
+                    params.page = 1;
+                    core.json('house/discount',params,function (json) {
+                        if(json.status == 1){
+                            $('#list').html(tpl('house_list'),json.result);
+                            loading = false;
+                            params.page = 1;
+                            if(json.result.list.length <= 0){
+                                loading = true;
+                                $(window).scroll = null;
+                                $('#list').html(tpl('house_empty'));
+                                return;
+                            }
+                            bindEvents();
+                            stop = true;
+                            bindMore();
+                        }
+                    },true,true);
+                }
+            });
+        }
+
     });
 
 </script>
 
-{php $reservation=true}
 {template 'common/footer_base'}

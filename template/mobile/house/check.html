@@ -1,6 +1,8 @@
 {template 'common/header_base'}
+<title>订单确认</title>
 <link rel="stylesheet" type="text/css" href="../addons/sbms/static/css/mobiscroll.custom.min.css" />
 <link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/check.css" />
+<link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/coupons.css" />
 <div id="container">
     <div class="add-order-body">
         <div class="hotal-info">
@@ -25,11 +27,11 @@
             </div>
             <div class="input-line">
                 <div class="input-label">手机号</div>
-                <div class="input-add"><input type="text" id="tel" name="tel" value="{$order['mobile']}" placeholder="请填写您的手机号" /></div>
+                <div class="input-add"><input type="number" id="tel" name="tel" value="{$order['mobile']}" placeholder="请填写您的手机号" /></div>
             </div>
             <div class="input-line">
                 <div class="input-label">身份证号</div>
-                <div class="input-add"><input type="text" id="card" name="card" value="" placeholder="请填写您的身份证号" /></div>
+                <div class="input-add"><input type="number" id="card" name="card" value="{$order['idcard']}" placeholder="请填写您的身份证号" /></div>
             </div>
             <div class="input-line">
                 <div class="input-label">选择到店时间</div>
@@ -43,20 +45,24 @@
             {loop $order['daymoney'] $item}
             <div class="detail-item">
                 <div class="item-name">{$item['title']}</div>
-                <div class="item-price">&yen;<i class="day_money">{$item['money']}</i></div>
+                <div class="item-price">&yen;<i class="day_money" data-price="{$item['money']}">{$item['money']}</i></div>
             </div>
             {/loop}
             <div class="detail-item">
                 <div class="item-name">应付金额</div>
                 <div class="item-price">&yen;<i class="all_money">{$order['dayallmoney']}</i></div>
             </div>
-            <div class="detail-item">
+            <div id="coupons" class="detail-item">
                 <div class="item-name">优惠券</div>
                 <div class="item-price">&yen;<i class="discount_money">{$order['discountmoney']}</i></div>
             </div>
             <div class="detail-item">
                 <div class="item-name">会员折扣</div>
                 <div class="item-price">&yen;<i class="level_money">{$order['levelmoney']}</i></div>
+            </div>
+            <div class="detail-item">
+                <div class="item-name">押金</div>
+                <div class="item-price">&yen;<i class="deposit_money">{$order['deposit']}</i></div>
             </div>
             <div class="detail-item">
                 <div class="item-name">实付房费</div>
@@ -76,39 +82,86 @@
         <input type="hidden" id="discountMoney" value="{$order['discountmoney']}" />
         <input type="hidden" id="levelMoney" value="{$order['levelmoney']}" />
         <input type="hidden" id="payMoney" value="{$order['paymoney']}" />
+        <input type="hidden" id="deposit" value="{$order['deposit']}" />
+        <input type="hidden" id="couponId" value="0" />
         <div class="paybtn">提交订单</div>
         <span>合计 <t class="order-money">&yen;<i class="pay_money">{$order['paymoney']}</i></t></span>
     </div>
 </div>
 
-<div class="payment">
+<div id="modal_pay" class="payment">
     <div class="payment-dialog">
-        <div class="dialog-header">支付方式选择</div>
+        <div class="dialog-header">支付方式选择<div class="dialog-close"><i class="fa fa-times-circle-o"></i></div></div>
         <div class="dialog-content">
-            <div class="pay-model" data-model="wechat">
-                <span>微信支付</span>
+            {if $order['wx_open'] == 1}
+            <div class="pay-model" data-model="wechat" data-value="2">
+                <div class="check-model-name">微信支付</div>
                 <div class="check-model"><i class="fa fa-times-circle"></i></div>
             </div>
-            <div class="pay-model" data-model="alipay">
-                <span>支付宝支付</span>
+            {/if}
+            {if $order['zfb_open'] == 1}
+            <div class="pay-model" data-model="alipay" data-value="1">
+                <div class="check-model-name">支付宝支付</div>
                 <div class="check-model"><i class="fa fa-times-circle"></i></div>
             </div>
-            <div class="pay-model" data-model="credit">
-                <span>余额支付</span>
+            {/if}
+            {if $order['ye_open'] == 1}
+            <div class="pay-model" data-model="credit" data-value="3">
+                <div class="check-model-name">余额支付</div>
                 <div class="check-model"><i class="fa fa-times-circle"></i></div>
             </div>
-            <div class="pay-model" data-model="goto">
-                <span>到店支付</span>
+            {/if}
+            {if $order['dd_open'] == 1}
+            <div class="pay-model" data-model="goto" data-value="4">
+                <div class="check-model-name">到店支付</div>
                 <div class="check-model"><i class="fa fa-times-circle"></i></div>
             </div>
+            {/if}
         </div>
         <div class="dialog-footer">确认支付</div>
     </div>
 </div>
 
+<div id="modal_coupons" class="coupons-list">
+    <div class="coupons-modal-header">
+        <div class="modal-back"><i class="fa fa-angle-left"></i></div>
+        我的优惠券
+    </div>
+    <div class="my-coupons"></div>
+</div>
+
+<script type="text/html" id="coupons_list">
+    <%each list as coupon%>
+    <div class="coupon-item-body">
+        <div class="coupon-header">
+            <div class="coupon-price"><span>&yen;</span><%coupon.cost%></div>
+            <div class="coupon-introduce"><%coupon.conditions%></div>
+        </div>
+        <div class="coupon-body">
+            <div class="coupon-title">
+                <div class="title"><%coupon.name%></div>
+                <%if coupon.seller_id > 0%>
+                <div class="own">仅<%coupon.seller_name%>可用</div>
+                <%/if%>
+            </div>
+            <div class="coupon-op">
+                <div class="coupon-date"><%coupon.start_time%>至<%coupon.end_time%></div>
+                <div class="coupon-btn"><a class="btn btn-primary" href="javascript:void(0);" data-id="<%coupon.id%>" data-price="<%coupon.cost%>">使用</a></div>
+            </div>
+        </div>
+    </div>
+    <%/each%>
+</script>
+<script type="text/html" id="coupons_empty">
+    <div class="club-list-empty">
+        <div class="empty-item-img"></div>
+        <div class="empty-item-text">未找到可用优惠券</div>
+    </div>
+</script>
+
 <script type="text/javascript" src="../addons/sbms/static/js/mobiscroll.custom.min.js"></script>
 <script type="text/javascript">
-    require(['core'],function (core) {
+    require(['core','tpl'],function (core,tpl) {
 
         var theme = "ios";
         var mode = "scroller";
@@ -144,16 +197,24 @@
             var price = parseFloat($('#roomPrice').val());
             var discount = parseFloat($('#discountMoney').val());
             var level = parseFloat($('#levelRate').val());
-            var roomMoney = num * price;
-            var allMoney = roomMoney * days;
-            var levelMoney = allMoney * level / 100 * -1;
-            var orderMoney = allMoney + levelMoney;
+            var deposit = parseFloat($('#deposit').val());
+            var allMoney = 0;
+            $('.day_money').each(function () {
+                 var price = parseFloat($(this).data('price'));
+                 var money = price * days;
+                 allMoney += money;
+                 $(this).html(parseFloat(money).toFixed(2));
+            });
 
-            $('.day_money').html(parseFloat(roomMoney).toFixed(2));
+            var depositMoney = num * deposit;
+            var levelMoney = allMoney * level / 100 * -1;
+            var orderMoney = allMoney + levelMoney - discount + depositMoney;
+
             $('.all_money').html(parseFloat(allMoney).toFixed(2));
             $('.discount_money').html(parseFloat(discount).toFixed(2));
             $('.level_money').html(parseFloat(levelMoney).toFixed(2));
             $('.pay_money').html(parseFloat(orderMoney).toFixed(2));
+            $('.deposit_money').html(parseFloat(depositMoney).toFixed(2));
 
             $('#discountMoney').val(parseFloat(discount).toFixed(2));
             $('#levelRate').val(parseFloat(levelMoney).toFixed(2));
@@ -164,13 +225,12 @@
         $('.paybtn').click(function () {
             //if($(this).attr('submitting') == '1'){    return;}
             //$(this).attr('submitting','1').html('提交中...');
-            $('.payment').show();
+            $('#modal_pay').show();
         });
 
         $('.pay-model').click(function () {
             $('.pay-model').children('div').removeClass('on');
             $('.pay-model').find('i').removeClass('fa-check-circle').addClass('fa-times-circle');
-            var model = $(this).data('model');
             $(this).children('div').addClass('on');
             $(this).find('i').removeClass('fa-times-circle').addClass('fa-check-circle');
         });
@@ -180,43 +240,43 @@
             //验证
             var realname = $('#name').val();
             if(realname == ''){
-                Tip.show($('#name'),'请填写入住人姓名');
+                core.tip.show('请填写入住人姓名');
                 return;
             }
             var tel = $('#tel').val();
             if(tel == ''){
-                Tip.show($('#tel'),'请填写手机号码');
+                core.tip.show('请填写手机号码');
                 return;
             }
             if(!tel.match(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/)){
-                Tip.show($('#tel'),'手机号格式不正确');
+                core.tip.show('手机号格式不正确');
                 return;
             }
             var card = $('#card').val();
             if(card == ''){
-                Tip.show($('#card'), '请填写身份证号码');
+                core.tip.show('请填写身份证号码');
                 return;
             }
             //var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
             if(!card.match(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/)){
-                Tip.show($('#card'), '身份证格式不正确');
+                core.tip.show('身份证格式不正确');
                 return;
             }
             var time = $('#time').val();
             if(time == ''){
-                Tip.show($('#time'),'请选择到店时间');
+                core.tip.show('请选择到店时间');
                 return;
             }
 
             var model = '';
             $('.pay-model').each(function () {
                 if($(this).children('div').hasClass('on')){
-                    model = $(this).data('model');
+                    model = $(this).data('value');
                 }
             });
 
             if(model == ''){
-                Tip.show(null,'请选择支付方式');
+                core.tip.show('请选择支付方式');
                 return
             }
 
@@ -236,6 +296,7 @@
             params.ordermoney = $('#payMoney').val();
             params.payment = model;
             params.num = $('#roomNum').val();
+            params.couponid = $('#couponId').val();
 
             core.json('order/confirm', params, function (json) {
                 $(this).removeAttr('submitting');
@@ -283,13 +344,19 @@
                             })
                         },true,true);
 
-                    }else if(type == 3){ //到店
-                        location.href = core.getUrl('order/detail', {id:orderId});
-                        return;
-                    }else if(type == 4){ //余额
-                        core.json('order/pay', {op:'complete', type:'credit', orerid:orderId},function (res) {
+                    }else if(type == 4){ //到店
+                        core.json('order/pay', {op:'complete', type:'cash', orderid:orderId}, function (res) {
+                            if(res.status != 1){
+                                core.tip.show(res.result);
+                                return;
+                            }
+                            location.href = core.getUrl('order/detail', {orderid:orderId});
+                            return;
+                        },true,true);
+                    }else if(type == 3){ //余额
+                        core.json('order/pay', {op:'complete', type:'credit', orderid:orderId},function (res) {
                             if(res.status == 1){
-                                core.message(res.result.msg,"","success");
+                                core.message(res.result.msg,"{php echo $this->createMobileUrl('order/detail')}&orderid=" + orderId,"success");
                                 return;
                             }else{
                                 core.tip.show(res.result);
@@ -301,6 +368,39 @@
                     core.tip.show(result);
                 }
             },true,true);
+        });
+
+        $('.dialog-close').click(function () {
+            $('#modal_pay').hide();
+        });
+
+        var w = screen.width;
+        var h = screen.height;
+        $('.coupons-list').css({width:w,height:h,left:w});
+
+        $('#coupons').click(function () {
+            core.json('member/query', {op:'coupons',seller_id:"{$order['hotal_id']}"}, function (res) {
+                if(res.result.list.length > 0){
+                    $('.my-coupons').html(tpl('coupons_list', res.result));
+                }else{
+                    $('.my-coupons').html(tpl('coupons_empty'));
+                }
+                $('#modal_coupons').animate({left:0},1000);
+
+                $('.btn-primary').unbind('click').click(function () {
+                    var id = $(this).data('id');
+                    var price = $(this).data('price');
+                    $('#couponId').val(id);
+                    $('#discountMoney').val(price);
+                    setPayMoney();
+                    $('.coupons-list').animate({left:w},1000);
+                });
+
+            },true,true);
+        });
+
+        $('.modal-back').click(function () {
+            $('.coupons-list').animate({left:w},1000);
         });
     });
 </script>

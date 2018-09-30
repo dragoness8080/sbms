@@ -170,17 +170,20 @@
        {/if} 
          {if $item['type']==1}
          <td >
-          <span class="label label-success">微信支付</span>
+          <span class="label label-success">支付宝支付</span>
         </td>
         {elseif $item['type']==2}
         <td >
-         <span class="label label-info">余额支付</span>
+         <span class="label label-info">微信支付</span>
        </td>
        {elseif $item['type']==3}
        <td >
-         <span class="label label-warning">到店支付</span>
+         <span class="label label-warning">余额支付</span>
        </td>
-
+       {elseif $item['type'] == 4}
+        <td >
+            <span class="label label-warning">到店支付</span>
+        </td>
        {/if} 
        <td>
         <a href="{php echo $this->createWebUrl('inorderinfo',array('id'=>$item['id']));}" class="storespan btn btn-xs">

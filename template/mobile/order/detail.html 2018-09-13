@@ -1,0 +1,240 @@
+{template 'common/header_base'}
+<link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/order_detail.css" />
+<div id="container">
+    <!--
+    <div class="detail-body">
+        <div class="page-header-bg"></div>
+        <div class="header-body">
+            <div class="header-hotal">
+                <div class="name">{$order['seller_name']}</div>
+                <div class="address">地址：{$order['seller_address']}</div>
+            </div>
+            <div class="header-date">
+                <div class="check-date-flex" style="border-right: solid 1px #F4F4F4;">
+                    <div class="check-date">{php echo date('Y-m-d',strtotime($order['arrival_time']))}</div>
+                    <div class="check-name">入住日期</div>
+                </div>
+                <div class="check-date-flex">
+                    <div class="check-date">{php echo date('Y-m-d',strtotime($order['departure_time']))}</div>
+                    <div class="check-name">退房时间</div>
+                </div>
+            </div>
+        </div>
+        <div class="order-detail-body">
+            <table>
+                <tr><td class="title">价格</td><td class="price">&yen;{$order['price']}</td></tr>
+                <tr>
+                    <td class="title">订单状态</td>
+                    <td>
+                        {if $order['status'] == 1}<span class="mark-wait">待付款</span>{/if}
+                        {if $order['status'] == 2}<span class="mark-pay">已付款</span>{/if}
+                        {if $order['status'] == 3}<span class="mark-cancel">已取消</span>{/if}
+                        {if $order['status'] == 4}<span class="mark-done">已完成</span>{/if}
+                        {if $order['status'] == 5}<span class="mark-in">已入住</span>{/if}
+                        {if $order['status'] == 6}<span class="mark-refund">申请退款</span>{/if}
+                        {if $order['status'] == 7}<span class="mark-refunded">已退款</span>{/if}
+                        {if $order['status'] == 8}<span class="mark-refuse">拒绝退款</span>{/if}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">支付方式</td>
+                    <td>
+                        {if $order['type'] == 1}支付宝支付{/if}
+                        {if $order['type'] == 2}微信支付{/if}
+                        {if $order['type'] == 3}余额支付{/if}
+                        {if $order['type'] == 4}到店付款{/if}
+                    </td>
+                </tr>
+                <tr><td class="title">房型</td><td>{$order['room_type']}</td></tr>
+                <tr><td class="title">床型</td><td>{$order['bed_type']}</td></tr>
+                <tr><td class="title">房间数</td><td>{$order['num']}间</td></tr>
+                <tr><td class="title">入住天数</td><td>{$order['days']}天</td></tr>
+                <tr><td class="title">预订人</td><td>{$order['name']}</td></tr>
+                <tr><td class="title">手机号</td><td>{$order['tel']}</td></tr>
+                <tr><td class="title">预计到店</td><td>{$order['dd_time']}</td></tr>
+                <tr><td class="title">订单编号</td><td>{$order['order_no']}</td></tr>
+            </table>
+        </div>
+    </div>
+    {if $order['status'] == 1 or $order['status'] == 2 or $order['status'] == 3}
+    <div class="order-operation">
+        {if $order['status'] == 1}
+        <div class="order-cancel">取消订单</div>
+        {if $order['type'] != 4}
+        <div class="order-pay" data-model="{$order['type']}">立即付款</div>
+        {/if}
+        {/if}
+        {if $order['status'] == 2}
+        <div class="order-refund">申请退款</div>
+        {/if}
+        {if $order['status'] == 3}
+        <div class="order-delete">删除订单</div>
+        {/if}
+    </div>
+    {/if}
+    -->
+</div>
+
+<script type="text/html" id="order_detail">
+    <div class="detail-body">
+        <div class="page-header-bg"></div>
+        <div class="header-body">
+            <div class="header-hotal">
+                <div class="name"><%order.seller_name%></div>
+                <div class="address">地址：<%order.seller_address%></div>
+            </div>
+            <div class="header-date">
+                <div class="check-date-flex" style="border-right: solid 1px #F4F4F4;">
+                    <div class="check-date"><%order.arrival_time%></div>
+                    <div class="check-name">入住日期</div>
+                </div>
+                <div class="check-date-flex">
+                    <div class="check-date"><%order.departure_time%></div>
+                    <div class="check-name">退房时间</div>
+                </div>
+            </div>
+        </div>
+        <div class="order-detail-body">
+            <table>
+                <tr><td class="title">价格</td><td class="price">&yen;<%order.price%></td></tr>
+                <tr>
+                    <td class="title">订单状态</td>
+                    <td>
+                        <%if order.status == 1%><span class="mark-wait">待付款</span><%/if%>
+                        <%if order.status == 2%><span class="mark-pay">已付款</span><%/if%>
+                        <%if order.status == 3%><span class="mark-cancel">已取消</span><%/if%>
+                        <%if order.status == 4%><span class="mark-done">已完成</span><%/if%>
+                        <%if order.status == 5%><span class="mark-in">已入住</span><%/if%>
+                        <%if order.status == 6%><span class="mark-refund">申请退款</span><%/if%>
+                        <%if order.status == 7%><span class="mark-refunded">已退款</span><%/if%>
+                        <%if order.status == 8%><span class="mark-refuse">拒绝退款</span><%/if%>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">支付方式</td>
+                    <td>
+                        <%if order.type == 1%>支付宝支付<%/if%>
+                        <%if order.type == 2%>微信支付<%/if%>
+                        <%if order.type == 3%>余额支付<%/if%>
+                        <%if order.type == 4%>到店付款<%/if%>
+                    </td>
+                </tr>
+                <tr><td class="title">房型</td><td><%order.room_type%></td></tr>
+                <tr><td class="title">床型</td><td><%order.bed_type%></td></tr>
+                <tr><td class="title">房间数</td><td><%order.num%>间</td></tr>
+                <tr><td class="title">入住天数</td><td><%order.days%>天</td></tr>
+                <tr><td class="title">预订人</td><td><%order.name%></td></tr>
+                <tr><td class="title">手机号</td><td><%order.tel%></td></tr>
+                <tr><td class="title">预计到店</td><td><%order.dd_time%></td></tr>
+                <tr><td class="title">订单编号</td><td><%order.order_no%></td></tr>
+            </table>
+        </div>
+    </div>
+    <%if (order.status == 1 or order.status == 2 or order.status == 3) and order.is_delete == 0%>
+    <div class="order-operation">
+        <%if order.status == 1%>
+        <div class="order-cancel">取消订单</div>
+        {if $order['type'] != 4}
+        <%if order.type != 4%>
+        <div class="order-pay" data-model="{$order['type']}">立即付款</div>
+        <%/if%>
+        <%/if%>
+        <%if order.status == 2%>
+        <div class="order-refund">申请退款</div>
+        <%/if%>
+        <%if order.status == 3%>
+        <div class="order-delete">删除订单</div>
+        <%/if%>
+    </div>
+    <%/if%>
+</script>
+
+<script type="text/javascript">
+    require(['core','tpl'],function (core,tpl) {
+        core.json('order/detail', {orderid:"{$orderId}"}, function (res) {
+            if(res.status == 1){
+                $('#container').html(tpl('order_detail', res.result));
+            }else{
+                core.tip.message('没有找到订单详情',"{php echo $this->createMobileUrl('order', array('p' => 'list'))}", 'error');
+                return;
+            }
+        });
+
+        $('.order-cancel').click(function () {
+            core.tip.confirm('确定要取消订单？',function () {
+                location.href = core.getUrl('order/op', {op:'cancel',id:'{$orderId}'});
+                return;
+            });
+        });
+        $('.order-pay').click(function () {
+            if($(this).attr('submitting') == '1'){    return;}
+            var type = $(this).data('model');
+            core.tip.confirm('确定要支付订单？',function () {
+                $(this).attr('submitting', '1');
+                if(type == 1){  //支付宝支付
+                    core.json('order/pay', {op:'pay', type:'alipay', orderid:orderId},function (rjson) {
+                        if(rjson.status != 1){
+                            core.tip.show(rjson.result);
+                            return;
+                        }
+                        location.href = core.getUrl('order/pay_alipay',{orderid:orderId});
+                        return;
+                    },true,true);
+                }else if(type == 2){    //微信支付
+                    core.json('order/pay', {op:'pay', type:'wechat', orderid:orderId},function (rjson) {
+                        if(rjson.status != 1){
+                            core.tip.show(rjson.result);
+                            return;
+                        }
+                        var wechat = rjson.result.wechat;
+                        WeixinJSBridge.invoke('getBrandWCPayRequest', {
+                            'appId': wechat.appid ? wechat.appid : wechat.appId,
+                            'timeStamp': wechat.timeStamp,
+                            'nonceStr': wechat.nonceStr,
+                            'package': wechat.package,
+                            'signType': wechat.signType,
+                            'paySign': wechat.paySign,
+                        }, function (res) {
+                            if (res.err_msg == 'get_brand_wcpay_request:ok'){
+                                core.json('order/pay', {
+                                    op:'complete',
+                                    orderid: orderId,
+                                    type:'weixin'
+                                },function (pay_json) {
+                                    if(pay_json.status==1){
+                                        core.tip.show(pay_json.result);
+                                    }
+                                    core.tip.show(pay_json.result);
+                                },true,true);
+                            }
+                        })
+                    },true,true);
+                }else if(type == 3){    //余额支付
+                    core.json('order/pay', {op:'complete', type:'credit', orerid:orderId},function (res) {
+                        if(res.status == 1){
+                            core.message(res.result.msg,"","success");
+                            return;
+                        }else{
+                            core.tip.show(res.result);
+                            return;
+                        }
+                    },true,true);
+                }
+            });
+        });
+        $('.order-refund').click(function () {
+            core.tip.confirm('确定申请退款',function () {
+                location.href = core.getUrl('order/op', {op:'refund',id:'{$orderId}'});
+                return;
+            });
+        });
+        $('.order-delete').click(function () {
+            core.tip.confirm('确定要删除订单',function () {
+                location.href = core.getUrl('order/op', {op:'delete',id:'{$orderId}'});
+                return;
+            });
+        });
+    });
+</script>
+
+{template 'common/footer'}

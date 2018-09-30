@@ -1,0 +1,111 @@
+{template 'common/header_base'}
+<title>评价</title>
+<link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/assess.css" />
+<link rel="stylesheet" type="text/css" href="../addons/sbms/static/css/star-rating.css" media="all" />
+<script type="text/javascript" src="../addons/sbms/static/js/star-rating.js"></script>
+<script type="text/javascript" src="../addons/sbms/static/js/ajaxfileupload.js"></script>
+<div id="container">
+    <div class="hotal-info">
+        <div class="hotal-img"><img src="{php echo tomedia($seller['ewm_logo'])}" style="width: 50px; height: 50px;" /></div>
+        <div class="hotal-text">{$seller['name']}</div>
+    </div>
+    <div class="room-info">
+        <div class="room-img"><img src="{php echo tomedia($room['logo'])}" style="width: 50px; height: 50px;" /></div>
+        <div class="room-text">
+            <div class="room-text-item">房型：{$room['name']}</div>
+            <div class="room-text-item">床型：{$room['size']}</div>
+        </div>
+        <div class="room-price">
+            <div class="room-price-item">&yen;{$order['price']}</div>
+            <div class="room-price-item">{$order['num']}间</div>
+        </div>
+    </div>
+    <div class="assess">
+        <form action='' method="post" >
+            <div class="assess-main">
+                <div class="line"> <input id="level"  value="0" type="number" class="rating" min=0 max=5 step=1 data-size="xs" ></div>
+                <div class="line1"><textarea id='content' placeholder='说点什么吧~~'></textarea></div>
+                <div class="line1">
+                    <div class="pic">
+                        晒图(最多1张)
+                        <div class="plus" style="position:relative"><i class="fa fa-plus" style="position:absolute;"></i>
+                            <input type="file" name='imgFile0' id='imgFile0' style="position:absolute;width:30px;height:30px;-webkit-tap-highlight-color: transparent;filter:alpha(Opacity=0); opacity: 0;" /></div>
+                        <div class="images"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comment_sub" id='comment_submit'>提交评论</div>
+        </form>
+    </div>
+</div>
+<script id="tpl_img" type="text/html">
+    <div class='img' data-img='<%filename%>'>
+        <img src='<%url%>' />
+        <div class='minus'><i class='fa fa-minus-circle'></i></div>
+    </div>
+</script>
+<script type="text/javascript">
+    var orderid = "{$orderid}";
+    require(['core','tpl'],function (core,tpl) {
+        $(".rating").rating({});
+        $('.plus input').change(function () {
+            core.loading('正在上传');
+            var comment =$(this).closest('.assess');
+            $.ajaxFileUpload({
+                url: core.getUrl('util/uploader'),
+                data: {file: "imgFile0"},
+                secureuri: false,
+                fileElementId: 'imgFile0',
+                dataType: 'json',
+                success: function (res) {
+                    core.removeLoading();
+                    var obj = $(tpl('tpl_img', res));
+                    $('.images',comment).append(obj);
+                    $('.minus',comment).click(function () {
+                        core.json('util/uploader', {op: 'remove', file: $(obj).data('img')}, function (rjson) {
+                            if (rjson.status == 1){
+                                $(obj).remove();
+                            }
+                            $('.plus',comment).show();
+                        }, false, true);
+                    });
+
+                    if ($('.img',comment).length >= 1){
+                        $('.plus',comment).hide();
+                    }
+                },
+                error: function (data, status, e) {
+                    core.removeLoading();
+                    core.tip.show('上传失败!');
+                }
+            });
+        });
+
+        $('#comment_submit').click(function () {
+            if ($(this).attr('saving') == '1'){ return;}
+            if($("#level").length>0 && $("#level").val()=='0'){
+                core.tip.show('请选择评分');
+                return;
+            }
+            if($.trim( $("#content").val() )==''){
+                core.tip.show('您不说点什么~');
+                $('#content').focus();
+                return;
+            }
+            $(this).html('正在处理...').attr('saving', 1);
+            var c0 = $('.assess-main');
+            var images = c0.find(".img").data('img');
+            var level = c0.find('.rating').val();
+            var content = c0.find('textarea').val();
+            core.json('order/op', {level:level,content:content,images:images,op: 'assess',orderid: orderid},function (res) {
+                if(res.status == 1){
+                    location.href = core.getUrl('order/detail',{orderid:orderid});
+                }else{
+                    $(this).html('提交评论').removeAttr('saving');
+                    core.tip.show('操作失败');
+                }
+            },true,true);
+        });
+    });
+</script>
+{template 'common/footer'}

@@ -1,0 +1,111 @@
+{template 'common/header_base'}
+<title>优惠券列表</title>
+<link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/coupons.css" />
+<div id="container">
+    <div class="list-body"></div>
+</div>
+<script type="text/html" id="coupon_list">
+<%each list as coupon%>
+<div class="coupon-item-body">
+    <div class="coupon-header">
+        <div class="coupon-price"><span>&yen;</span><%coupon.cost%></div>
+        <div class="coupon-introduce"><%coupon.conditions%></div>
+    </div>
+    <div class="coupon-body">
+        <div class="coupon-title">
+            <div class="title"><%coupon.name%></div>
+            <%if coupon.seller_id > 0%>
+            <div class="own">仅<%coupon.seller_name%>可用</div>
+            <%/if%>
+        </div>
+        <div class="coupon-op">
+            <div class="coupon-date"><%coupon.start_time%>至<%coupon.end_time%></div>
+            <div class="coupon-btn">
+                <%if coupon.has == 0%>
+                <button type="button" class="btn btn-primary" data-id="<%coupon.id%>">领取</button>
+                <%else%>
+                <button type="button" class="btn btn-default">已领</button>
+                <%/if%>
+            </div>
+        </div>
+    </div>
+</div>
+<%/each%>
+</script>
+<script type="text/html" id="coupon_empty">
+<div class="club-list-empty">
+    <div class="empty-item-text">没有优惠券</div>
+</div>
+</script>
+<script type="text/javascript">
+    require(['core','tpl'],function (core,tpl) {
+        var loadding = false;
+        var stop = true;
+        var params = new Object();
+        params.page = 1;
+
+        getCoupons();
+
+        function getCoupons() {
+            core.json('coupon/list', params, function (res) {
+                var result = res.result;
+                if(res.status != 1 || result.list.length <= 0){
+                    loadding = true;
+                    $(window).scroll = null;
+                    $('.list-body').html(tpl('coupon_empty'));
+                    return;
+                }
+
+                params.page = 1;
+                loadding = false;
+                stop = true;
+                $('.list-body').html(tpl('coupon_list', result));
+
+                bindsEvents();
+                bindsMore();
+
+            },true,true);
+        }
+
+        function bindsMore() {
+            $(window).scroll(function () {
+                if(loadding){ return;}
+                var totalHeight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+                if($(document).height() <= totalHeight){
+                    if(stop){
+                        stop = false;
+                        $('.list-body').append('<div class="list-laoding"><i class="fa fa-spinner fa-spin"></i>正在加载更多优惠券</div>');
+                        if(params.page == '' || params.page == 'undefined'){
+                            params.page = 1;
+                        }
+                        params.page ++;
+                    }
+                    core.json('coupon', params, function (cres) {
+                        if(cres.status == 1){
+                            $('.list-laoding').remove();
+                            $('.list-body').append(tpl('coupon_list', cres.result));
+                            if(cres.result.list.length < cres.result.pagesize){
+                                $('.list-body').append('<div class="list-laoding">已加载全优惠券</div>');
+                                loadding = true;
+                                $(window).scroll = null;
+                                return;
+                            }
+                        }
+                    },true,true);
+
+                    bindsEvents();
+                }
+            });
+        }
+
+        function bindsEvents() {
+            $('.btn-primary').unbind('click').click(function () {
+                core.json('coupon/list', {id:$(this).data('id'),op:'receive'}, function (rec) {
+                    $('.list_body').html(tpl('coupon_list', rec.result));
+                    bindsMore();
+                },true,true);
+            });
+        }
+    })
+</script>
+{template 'common/footer'}

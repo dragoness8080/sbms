@@ -1,28 +1,31 @@
 {template 'common/header_base'}
+<title>会员中心</title>
 <link rel="stylesheet" type="text/css" href="../addons/sbms/template/mobile/common/css/member.css" />
 <div id="container">
-    <div class="page-header-bg">
-        <div class="member-info">
-            <div class="member-info-img"><img src="{$member['img']}" class="img-circle" /></div>
-            <div class="member-info-dec">
-                <div class="member-name">{$member['name']}</div>
-                <div class="member-vip">{$levelName}</div>
-            </div>
-        </div>
-    </div>
     <div class="member-body">
+        <div class="page-header-bg">
+            <a href="{php echo $this->createMobileUrl('member', array('p' => 'detail'))}">
+            <div class="member-info">
+                <div class="member-info-img"><img src="{$member['img']}" class="img-circle" /></div>
+                <div class="member-info-dec">
+                    <div class="member-name">{$member['name']}</div>
+                    <div class="member-vip">{$levelName}</div>
+                </div>
+            </div>
+            </a>
+        </div>
         <div class="mmeber-float-box">
             <div class="flex-space"></div>
             <div class="flex-value">
-                <div class="number">0.00</div>
+                <div class="number">{$credit2}</div>
                 <div class="numbern-title">余额</div>
             </div>
             <div class="flex-value">
-                <div class="number">0</div>
+                <div class="number">{$credit1}</div>
                 <div class="numbern-title">积分</div>
             </div>
             <div class="flex-value">
-                <div class="number">0</div>
+                <div class="number">{$coupons}</div>
                 <div class="numbern-title">优惠券</div>
             </div>
             <div class="flex-space"></div>
@@ -45,12 +48,32 @@
         </div>
 
         <div class="member-line">
-            <div class="line-box">
-                <a href="javascript:void(0)">
+            <a href="{php echo $this->createMobileUrl('coupon')}">
+                <div class="line-box">
                     <span>领取优惠券</span>
                     <div class="angele-right"><i class="fa fa-angle-right"></i></div>
-                </a>
-            </div>
+                </div>
+            </a>
+            <a href="{php echo $this->createMobileUrl('member', array('p' => 'mycoupons'))}">
+                <div class="line-box">
+                    <span>我的优惠券</span>
+                    <div class="angele-right"><i class="fa fa-angle-right"></i></div>
+                </div>
+            </a>
+            <!--
+            <a href="{php echo $this->createMobileUrl('member', array('p' => 'center','op' => 'custom'))}">
+                <div class="line-box">
+                    <span>联系客服</span>
+                    <div class="angele-right"><i class="fa fa-angle-right"></i></div>
+                </div>
+            </a>
+            <a href="{php echo $this->createMobileUrl('member', array('p' => 'join'))}">
+                <div class="line-box">
+                    <span>合作加盟</span>
+                    <div class="angele-right"><i class="fa fa-angle-right"></i></div>
+                </div>
+            </a>
+            -->
         </div>
     </div>
 </div>

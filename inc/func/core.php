@@ -3,6 +3,13 @@ defined('IN_IA') or exit ('Access Denied');
 class Core extends WeModuleSite
 {
 
+    public function __construct(){
+        m('common')->checkClose();
+        if (is_weixin()){
+            m('member')->checkMember();
+        }
+    }
+
     public function getMainMenu()
     {
         global $_W, $_GPC;
@@ -125,7 +132,14 @@ class Core extends WeModuleSite
                 'items' => array(
                      0 => $this->createMainMenu('用户列表 ', $do, 'user2', ''),
                 )
-            );         
+            );
+
+            $navemenu[21] = array(
+                'title' => '<a href="index.php?c=site&a=entry&op=display&do=discovery&m=sbms" class="panel-title wytitle" id="yframe-21"><icon style="color:#8d8d8d;" class="fa fa-search-plus"></icon>  发现</a>',
+                'items' => array(
+                    0 => $this->createMainMenu('发现列表', $do, 'discovery', ''),
+                )
+            );
             $navemenu[5] = array(
                 'title' => '<a href="index.php?c=site&a=entry&op=display&do=settings&m=sbms" class="panel-title wytitle" id="yframe-5"><icon style="color:#8d8d8d;" class="fa fa-cog"></icon>  系统设置</a>',
                 'items' => array(
@@ -136,8 +150,7 @@ class Core extends WeModuleSite
                     4 => $this->createMainMenu('短信配置', $do, 'sms', ''),
                     5 => $this->createMainMenu('模板消息配置', $do, 'news', ''),                  
                     //6 => $this->createMainMenu('提现设置', $do, 'txset', ''),
-                    7 => $this->createMainMenu('版权设置', $do, 'copyright', ''),                   
-                    
+                    7 => $this->createMainMenu('版权设置', $do, 'copyright', '')
                 )
             );
           }
@@ -1071,5 +1084,22 @@ echo set_msg($_W,$order_id);
             template_compile($source, $compile, true);
         }
         return $compile;
+    }
+
+    public function createMobileUrl($do, $query = array(), $noredirect = true) {
+        global $_W, $_GPC;
+        $do = explode('/', $do);
+        if (isset($do[1])) {
+            $query = array_merge(array(
+                'p' => $do[1]
+            ), $query);
+        }
+        if (empty($query['mid'])) {
+            $mid = intval($_GPC['mid']);
+            if (!empty($mid)) {
+                $query['mid'] = $mid;
+            }
+        }
+        return $_W['siteroot'] . 'app/' . substr(parent::createMobileUrl($do[0], $query, true), 2);
     }
 }

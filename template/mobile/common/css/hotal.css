@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-.homestay-header { width: 100%; height: 10rem; background: #00A388; display: block;}
+.homestay-header { width: 100%; height: 10rem; background: #1C9488; display: block;}
 .homestay-body { width: 100%; height: auto; background: #FFFFFF; display: block;}
 .hotal-card { margin-top: -8rem; width: 90%; margin-left: 5%; border-radius: 10px; background: #FFFFFF; box-shadow: 0 0 5px #8A8A8A; display: flex; flex-direction: column;}
 .hotal-info { display: flex; flex: 1; flex-direction: row; padding-left: 10px; padding-right: 10px; padding-top: 15px; padding-bottom: 5px;}
